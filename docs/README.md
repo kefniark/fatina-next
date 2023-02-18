@@ -5,7 +5,6 @@ title: Project home
 heroImage: /logo.svg
 heroText: Fatina
 tagline: Lighweight Tweening Library for Games / Web
-
 actions:
   - text: Getting Started 💡
     link: /getting-started/
