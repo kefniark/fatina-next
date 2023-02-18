@@ -93,7 +93,6 @@ export function animate<T extends Record<string, unknown>>(ojb: T) {
 
             // queue tween
             queue.push({ props: tweens, duration, elapsed: 0, settings })
-            console.log('Start tween with', settings)
             start()
 
             return animate
