@@ -14,8 +14,9 @@ export default hopeTheme({
 
   logo: "/logo.svg",
 
-  repo: "kefniark/fatina2",
+  repo: "kefniark/fatina-next",
   docsDir: "docs",
+  docsBranch: "develop",
 
   locales: {
     "/": {
@@ -28,7 +29,9 @@ export default hopeTheme({
       displayFooter: true,
 
       metaLocales: {
-        editLink: "Edit",
+        editLink: undefined,
+        lastUpdated: undefined,
+        contributors: undefined
       },
     }
   },
