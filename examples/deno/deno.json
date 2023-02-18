@@ -1,0 +1,14 @@
+{
+    "imports": {
+      "fatina": "../../packages/fatina/dist/fatina.js"
+    },
+    "tasks": {
+      "dev": "deno run index.ts"
+    },
+    "compilerOptions": {
+      "lib": [
+        "dom",
+        "deno.ns"
+      ]
+    }
+  }

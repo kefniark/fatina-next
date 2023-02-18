@@ -1,0 +1,33 @@
+{
+  "name": "fatina",
+  "version": "0.0.1",
+  "description": "",
+  "type": "module",
+  "license": "UNLICENSED",
+  "main": "./dist/fatina.cjs",
+  "module": "./dist/fatina.js",
+  "types": "./dist/fatina.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/fatina.js",
+      "require": "./dist/fatina.cjs"
+    }
+  },
+  "scripts": {
+    "clean": "rm -rf ./node_modules ./dist",
+    "lib:build": "rm -rf ./dist && run-p lib:build:* && cp -R dist/* ../../docs/.vuepress/public/fatina/",
+    "lib:build:vite": "vite build",
+    "lib:build:types": "tsc --declaration --emitDeclarationOnly",
+    "test": "vitest run --coverage",
+    "test:ui": "vitest --ui"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@vitest/coverage-c8": "^0.28.5",
+    "@vitest/ui": "^0.28.5",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^4.9.5",
+    "vite": "^4.1.0",
+    "vitest": "^0.28.5"
+  }
+}

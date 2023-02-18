@@ -1,0 +1,12 @@
+.turbo
+.temp
+.cache
+coverage
+node_modules
+
+# docs
+docs/.vuepress/dist/
+docs/.vuepress/public/fatina/
+
+# packages
+examples/vite-esm/dist
