@@ -96,7 +96,7 @@ onMounted(() => {
     useFatinaRaf();
     
     // animate
-    animate(img.value).to({ "style.left": 480 }, 1000, { unit: 'px' })
+    animate(img.value).to({ "style.left": 300 }, 1000, { unit: 'px' })
 });
 </script>
 
@@ -148,7 +148,7 @@ onMounted(() => {
     const animate3 = animate(img3.value);
 
     const randomPosition = () => ({
-      "style.left": Math.random() * 480,
+      "style.left": Math.random() * 300,
       "style.top": Math.random() * 100
     })
 
