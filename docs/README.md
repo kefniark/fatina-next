@@ -31,7 +31,7 @@ features:
 
   - title: Runs everywhere
     icon: slides
-    details: Modern ESM Build first (browser, nodejs, deno) and CommonJS fallback for old nodeJS.
+    details: Modern ESM Build first (Browser, Nodejs, Deno) and CommonJS fallback for old nodeJS.
 
   - title: Composition API
     icon: markdown

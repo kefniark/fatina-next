@@ -1,11 +1,16 @@
-name: ⌛ Pull Request
+name: ⌛ Tests
 
 on:
+  push:
+    branches: [develop]
+    paths:
+      - packages/**
+      - yarn.lock
   pull_request:
     branches: [develop]
-  paths:
-    - packages/**
-    - yarn.lock
+    paths:
+      - packages/**
+      - yarn.lock
 
 jobs:
   test:
