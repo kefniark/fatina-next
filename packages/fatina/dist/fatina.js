@@ -3,15 +3,15 @@ function B() {
   if (console.log(globalThis.requestAnimationFrame), !globalThis.requestAnimationFrame)
     return;
   const n = Q(), e = 1e3 / 60;
-  let r = 0, s = 0, f;
-  const g = (a) => {
+  let r = 0, a = 0, f;
+  const g = (s) => {
     if (f === void 0)
-      f = a;
+      f = s;
     else {
-      const u = Math.round((a - f) / e);
-      s = (u - r) * e, r = u;
+      const u = Math.round((s - f) / e);
+      a = (u - r) * e, r = u;
     }
-    console.log(s), n.update(s), globalThis.requestAnimationFrame(g);
+    console.log(a), n.update(a), globalThis.requestAnimationFrame(g);
   };
   return globalThis.requestAnimationFrame(g), n;
 }
@@ -139,10 +139,10 @@ const P = {
   easing: null,
   unit: null
 };
-function sn(n) {
+function an(n) {
   const e = [];
   let r;
-  const s = /* @__PURE__ */ new Set(), { start: f, dispose: g } = S((u) => {
+  const a = /* @__PURE__ */ new Set(), { start: f, dispose: g } = S((u) => {
     let h = 50;
     for (; u > 0 && h > 0; ) {
       if (h--, !r) {
@@ -167,15 +167,15 @@ function sn(n) {
           }
         r.elapsed = c, u -= t;
       }
-      r.elapsed >= r.duration && (r.handler && s.add(r.handler), r = void 0);
+      r.elapsed >= r.duration && (r.handler && a.add(r.handler), r = void 0);
     }
-    s.size > 0 && (s.forEach((t) => t()), s.clear());
-  }), a = {
+    a.size > 0 && (a.forEach((t) => t()), a.clear());
+  }), s = {
     on(u) {
-      return e.push({ props: [], duration: 0, elapsed: 0, handler: u, settings: null }), a;
+      return e.push({ props: [], duration: 0, elapsed: 0, handler: u, settings: null }), s;
     },
     delay(u) {
-      return e.push({ props: [], duration: u, elapsed: 0, settings: null }), a;
+      return e.push({ props: [], duration: u, elapsed: 0, settings: null }), s;
     },
     to(u, h = 500, t) {
       const c = t ? Object.assign({}, P, t) : null, l = [];
@@ -194,12 +194,13 @@ function sn(n) {
           });
         }
       }
-      return e.push({ props: l, duration: h, elapsed: 0, settings: c }), console.log("Start tween with", c), f(), a;
+      return e.push({ props: l, duration: h, elapsed: 0, settings: c }), console.log("Start tween with", c), f(), s;
     }
   };
-  return a;
+  return s;
 }
 export {
+  an as animate,
   P as animationDefaultSettings,
   en as easingInBack,
   F as easingInBounce,
@@ -232,7 +233,6 @@ export {
   R as easingOutQuart,
   H as easingOutQuint,
   j as easingOutSine,
-  sn as useAnimate,
   Q as useFatina,
   B as useFatinaRaf,
   S as useTicker

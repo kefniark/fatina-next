@@ -31,7 +31,7 @@ npm i -D fatina@next
 @tab:active web
 
 ```ts
-import { useFatinaRaf, useAnimate } from "fatina"
+import { useFatinaRaf, animate } from "fatina"
 
 // to run once : start the update loop
 useFatinaRaf()
@@ -39,13 +39,13 @@ useFatinaRaf()
 const jsObject = { a: 0 }
 
 // create a 1000ms animation 
-useAnimate(jsObject).to({ a: 100 }, 1000)
+animate(jsObject).to({ a: 100 }, 1000)
 ```
 
 @tab nodejs
 
 ```ts
-const { useFatina, useAnimate } = require('fatina');
+const { useFatina, animate } = require('fatina');
 
 // get the method to manually update animations
 const { update } = useFatina()
@@ -53,7 +53,7 @@ const { update } = useFatina()
 const jsObject = { a: 0 }
 
 // create a 1000ms animation 
-useAnimate(obj).to({ a: 100 }, 1000)
+animate(obj).to({ a: 100 }, 1000)
 
 // then manually tick the update loop (here 5000ms)
 update(5000)
@@ -62,7 +62,7 @@ update(5000)
 @tab deno
 
 ```ts
-import { useFatina, useAnimate } from 'fatina'
+import { useFatina, animate } from 'fatina'
 
 // get the method to manually update animations
 const { update } = useFatina()
@@ -70,7 +70,7 @@ const { update } = useFatina()
 const jsObject = { a: 0 }
 
 // create a 1000ms animation 
-useAnimate(jsObject).to({ a: 100 }, 1000)
+animate(jsObject).to({ a: 100 }, 1000)
 
 // then manually tick the update loop (here 5000ms)
 update(5000)
@@ -88,7 +88,7 @@ update(5000)
 ```vue
 <script setup>
 import { onMounted, ref } from "vue";
-import { useFatinaRaf, useAnimate } from "fatina";
+import { useFatinaRaf, animate } from "fatina";
 
 const img = ref();
 onMounted(() => {
@@ -96,7 +96,7 @@ onMounted(() => {
     useFatinaRaf();
     
     // animate
-    useAnimate(img.value).to({ "style.left": 480 }, 1000, { unit: 'px' })
+    animate(img.value).to({ "style.left": 480 }, 1000, { unit: 'px' })
 });
 </script>
 
@@ -133,7 +133,7 @@ onMounted(() => {
 ```vue
 <script setup>
 import { onMounted, ref } from "vue";
-import { useFatinaRaf, useAnimate, easingInOutSine, easingOutElastic, easingOutQuad } from "fatina";
+import { useFatinaRaf, animate, easingInOutSine, easingOutElastic, easingOutQuad } from "fatina";
 
 // initialize update loop
 useFatinaRaf();
@@ -143,9 +143,9 @@ const img2 = ref();
 const img3 = ref();
 onMounted(() => {
     // get images to animates
-    const animate1 = useAnimate(img1.value);
-    const animate2 = useAnimate(img2.value);
-    const animate3 = useAnimate(img3.value);
+    const animate1 = animate(img1.value);
+    const animate2 = animate(img2.value);
+    const animate3 = animate(img3.value);
 
     const randomPosition = () => ({
       "style.left": Math.random() * 480,

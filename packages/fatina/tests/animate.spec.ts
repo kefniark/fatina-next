@@ -1,12 +1,12 @@
-import { useFatina, useAnimate } from '../src'
+import { useFatina, animate } from '../src'
 import { it, describe, expect } from 'vitest'
 
-describe('useAnimate', () => {
+describe('animate', () => {
     it('should be able to tween object linearly', () => {
         const { update } = useFatina()
     
         const obj = { a: 1, c: 3, b: 'name' }
-        useAnimate(obj)
+        animate(obj)
             .to({ a: 2 }, 1000)
             .to({ c: 0 }, 1000)
     
@@ -25,7 +25,7 @@ describe('useAnimate', () => {
         const { update } = useFatina()
     
         const obj = { position: { a: 1 }, a: 0, title: "name" }
-        useAnimate(obj).to({ a: -2, "position.a": 2 }, 1000)
+        animate(obj).to({ a: -2, "position.a": 2 }, 1000)
     
         update(1000)
     
@@ -37,7 +37,7 @@ describe('useAnimate', () => {
         const { update } = useFatina()
     
         const obj = { a: 0, title: "name" }
-        useAnimate(obj)
+        animate(obj)
             .delay(500)
             .to({ a: 2 }, 500)
             .delay(500)
@@ -68,7 +68,7 @@ describe('useAnimate', () => {
 
         for (let i = 0; i < 2; i++) {
             const id = i
-            useAnimate(obj)
+            animate(obj)
                 .on(() => console.log(`before delay ${id}`))
                 .delay(500)
                 .on(() => console.log(`after delay ${id}`))

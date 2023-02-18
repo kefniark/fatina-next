@@ -2,7 +2,7 @@ import { easingLinear } from "./easing"
 import { useTicker } from "./fatina"
 import { animationDefaultSettings, AnimationSettings, FlattenObjectKeys, Tween, TweenProps } from "./types"
 
-export function useAnimate<T extends Record<string, unknown>>(ojb: T) {
+export function animate<T extends Record<string, unknown>>(ojb: T) {
     const queue: Tween[] = []
     let current: Tween | undefined
 
