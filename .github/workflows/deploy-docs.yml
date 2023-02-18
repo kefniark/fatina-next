@@ -30,9 +30,11 @@ jobs:
           cd docs
           yarn build
 
-      - name: Deploy Docs
-        uses: JamesIves/github-pages-deploy-action@v4
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
         with:
-          # This is the branch where the docs are deployed to
-          branch: gh-pages
-          folder: docs/.vuepress/dist
+          path: 'docs/.vuepress/dist'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
