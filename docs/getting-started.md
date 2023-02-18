@@ -110,7 +110,7 @@ onMounted(() => {
 ```json
 {
   "imports": {
-    "fatina": "/fatina/fatina.js"
+    "fatina": "/fatina-next/fatina/fatina.js"
   }
 }
 ```
@@ -178,7 +178,7 @@ onMounted(() => {
 ```json
 {
   "imports": {
-    "fatina": "/fatina/fatina.js"
+    "fatina": "/fatina-next/fatina/fatina.js"
   }
 }
 ```

@@ -3,7 +3,7 @@ const ticks_add = new Set<(dt: number) => void>()
 const ticks_remove = new Set<(dt: number) => void>()
 
 export function useFatinaRaf() {
-    console.log(globalThis.requestAnimationFrame)
+    // console.log(globalThis.requestAnimationFrame)
     if (!globalThis.requestAnimationFrame) return
 
     const fatina = useFatina()
@@ -22,7 +22,7 @@ export function useFatinaRaf() {
             lastFrame = currentFrame;
         }
         
-        console.log(deltaTime)
+        // console.log(deltaTime)
         fatina.update(deltaTime)
         globalThis.requestAnimationFrame(handler)
 
