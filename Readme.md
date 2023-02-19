@@ -47,7 +47,6 @@ await animate(obj).to({ x: 2 }, 1000).async()
 animate(obj).to({ x: 200 }, 1000, {
     relative: true,
     steps: 5,
-    unit: 'px',
     easing: easingOutQuad
 })
 

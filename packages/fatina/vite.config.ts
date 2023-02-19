@@ -16,6 +16,7 @@ export default {
     }
   },
   test: {
+    environment: "happy-dom",
     coverage: {
       reportsDirectory: './coverage',
       reporter: ['text', 'html']

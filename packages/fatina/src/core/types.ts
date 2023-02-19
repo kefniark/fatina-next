@@ -18,15 +18,24 @@ export interface Tween {
 export interface TweenProps {
     parent: Record<string, number>
     property: string
-    target: number
+    target: PropsValue
     diff: number
-    changed: number
 }
 
+export type PropsValue = number | FieldWrapper<unknown>
 export type AnimationSettings = typeof animationDefaultSettings
 export type Easing = (t: number) => number
 
 export const animationDefaultSettings = {
-  easing: null as null | Easing,
-  unit: null as null | string
+  easing: null as null | Easing
+}
+
+export interface FieldWrapper<T> {
+  parse(val: T): number
+  serialize(value: number): T
+  zero(): number
+  mul(val1: number, val2: number): number
+  add(val1: number, val2: number): number
+  sub(val1: number, val2: number): number
+  value: T
 }

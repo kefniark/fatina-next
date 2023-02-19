@@ -1,8 +1,8 @@
 import { easingLinear } from "./easing"
 import { useTicker } from "./fatina"
-import { animationDefaultSettings, AnimationSettings, FlattenObjectKeys, Tween, TweenProps } from "./types"
+import { animationDefaultSettings, AnimationSettings, FieldWrapper, FlattenObjectKeys, PropsValue, Tween, TweenProps } from "./types"
 
-export function animate<T extends Record<string, unknown>>(ojb: T) {
+export function animate<T extends Record<string, unknown>>(obj: T | T[]) {
     const queue: Tween[] = []
     let current: Tween | undefined
 
@@ -21,7 +21,12 @@ export function animate<T extends Record<string, unknown>>(ojb: T) {
 
                 // initialize
                 for (const tween of current.props) {
-                    tween.diff = tween.target - (current.settings?.unit ? parseInt(tween.parent[tween.property] as any, 10) || 0 : tween.parent[tween.property])
+                    if (typeof tween.target === "number") {
+                        tween.diff = tween.target - tween.parent[tween.property]
+                    } else {
+                        const wrap = tween.target
+                        tween.diff = wrap.sub(wrap.parse(wrap.value), wrap.parse(tween.parent[tween.property]))
+                    }
                 }
             }
 
@@ -31,15 +36,16 @@ export function animate<T extends Record<string, unknown>>(ojb: T) {
                 const after = current.elapsed + usedDeltaTime
                 const easing = current.settings?.easing ?? easingLinear
                 for (const tween of current.props) {
-                    if (current.settings?.unit) {
-                        const from = parseInt(tween.parent[tween.property] as any, 10) || 0
+                    if (typeof tween.target === "number") {
+                        const start = tween.target - tween.diff
                         const diff = tween.diff * easing(after / current.duration)
-                        tween.parent[tween.property] = `${from + diff - tween.changed}${current.settings.unit}` as any
-                        tween.changed = diff
+                        tween.parent[tween.property] = start + diff 
                     } else {
-                        const diff = tween.diff * easing(after / current.duration)
-                        tween.parent[tween.property] += diff - tween.changed
-                        tween.changed = diff
+                        const wrap = tween.target
+                        const target = wrap.parse(wrap.value)
+                        const start = wrap.sub(target, tween.diff)
+                        const diff = wrap.mul(tween.diff, easing(after / current.duration))
+                        tween.parent[tween.property] = wrap.serialize(wrap.add(start, diff)) as number
                     }
                 }
 
@@ -61,6 +67,7 @@ export function animate<T extends Record<string, unknown>>(ojb: T) {
         }
     })
 
+    
     const animate = {
         on(handler: CallableFunction) {
             queue.push({ props: [], duration: 0, elapsed: 0, handler, settings: null })
@@ -70,25 +77,32 @@ export function animate<T extends Record<string, unknown>>(ojb: T) {
             queue.push({ props: [], duration, elapsed: 0, settings: null })
             return animate
         },
-        to(props: Partial<Record<FlattenObjectKeys<T>, number>>, duration: number = 500, options?: Partial<AnimationSettings>) {
+        async(): Promise<void> {
+            return new Promise(resolve => {
+                queue.push({ props: [], duration: 0, elapsed: 0, handler: () => resolve(), settings: null })
+            })
+        },
+        to(props: Partial<Record<FlattenObjectKeys<T>, PropsValue>>, duration: number = 500, options?: Partial<AnimationSettings>) {
             const settings: AnimationSettings | null = options ? Object.assign({}, animationDefaultSettings, options) : null
             const tweens: TweenProps[] = []
-            for (const key in props) {
-                const path = key.split('.')
-                const target: number = (props as Record<string, number>)[key]
-                let parent: any = ojb
-                let property = path.pop()
-                if (!property) continue
-                for (const p of path) {
-                    if (p in parent) parent = parent[p]
+            const arr = Array.isArray(obj) ? obj : [obj]
+            for (const entry of arr) {
+                for (const key in props) {
+                    const path = key.split('.')
+                    const target: number = (props as Record<string, number>)[key]
+                    let parent: any = entry
+                    let property = path.pop()
+                    if (!property) continue
+                    for (const p of path) {
+                        if (p in parent) parent = parent[p]
+                    }
+                    tweens.push({
+                        parent,
+                        property,
+                        diff: 0,
+                        target
+                    })
                 }
-                tweens.push({
-                    parent,
-                    property,
-                    diff: 0,
-                    changed: 0,
-                    target
-                })
             }
 
             // queue tween

@@ -1,6 +1,6 @@
-import { useFatinaRaf, animate } from "fatina"
+import { useFatinaAuto, animate } from "fatina"
 
-useFatinaRaf()
+useFatinaAuto()
 
 const obj = { a: 0 }
 animate(obj).to({ a: 100 }, 1000)

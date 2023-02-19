@@ -1,7 +1,7 @@
-import { useFatina, animate } from '../src'
+import { useFatina, animate } from '../../src'
 import { it, describe, expect } from 'vitest'
 
-describe('animate', () => {
+describe('core > animate', () => {
     it('should be able to tween object linearly', () => {
         const { update } = useFatina()
     
@@ -21,6 +21,35 @@ describe('animate', () => {
         expect(obj.c).to.equal(0)
     })
     
+    it('should be able to tween multiple object', () => {
+        const { update } = useFatina()
+    
+        const obj1 = { a: 0, title: "name" }
+        const obj2 = { a: 2 }
+        
+        animate([obj1, obj2]).to({ a: 1 }, 1000)
+    
+        update(1000)
+    
+        expect(obj1.a).to.equal(1)
+        expect(obj2.a).to.equal(1)
+    })
+
+    it('should be able to await tween', async () => {
+        const { update } = useFatina()
+    
+        const obj = { a: 0, title: "name" }
+        
+        await new Promise<void>((resolve) => {
+            animate(obj).to({ a: 1 }, 1000).async().then(() => {
+                expect(obj.a).to.equal(1)
+                resolve()
+            })
+        
+            update(1001)
+        })
+    })
+
     it('should be able to tween nested object', () => {
         const { update } = useFatina()
     

@@ -31,10 +31,10 @@ npm i -D fatina@next
 @tab:active web
 
 ```ts
-import { useFatinaRaf, animate } from "fatina"
+import { useFatinaAuto, animate } from "fatina"
 
 // to run once : start the update loop
-useFatinaRaf()
+useFatinaAuto()
 
 const jsObject = { a: 0 }
 
@@ -88,20 +88,34 @@ update(5000)
 ```vue
 <script setup>
 import { onMounted, ref } from "vue";
-import { useFatinaRaf, animate } from "fatina";
+import { useFatinaAuto, animateCSS } from "fatina";
 
+const bg = ref();
 const img = ref();
 onMounted(() => {
     // initialize update loop
-    useFatinaRaf();
+    useFatinaAuto();
     
     // animate
-    animate(img.value).to({ "style.left": 300 }, 1000, { unit: 'px' })
+    animateCSS(img.value).to({ left: "300px" }, 1000)
+
+    bg.value.style.background = "#FFFFFF"
+    animateCSS(bg.value)
+      .to({ background: "#FF0000" }, 2000)
+      .to({ background: "#FFFF00" }, 2000)
+      .to({ background: "#FFFFFF" }, 2000)
+      .to({ background: "#00FFFF" }, 2000)
+      .to({ background: "#0000FF" }, 2000)
+      .to({ background: "#FF00FF" }, 2000)
+      .to({ background: "#000000" }, 2000)
+      .to({ background: "#FFFFFF" }, 2000)
 });
 </script>
 
 <template>
-  <img ref="img" src="https://pixijs.io/examples/examples/assets/bunny.png" style="position: absolute"/>
+  <div ref="bg" style="height: 100px;">
+    <img ref="img" src="https://pixijs.io/examples/examples/assets/bunny.png" style="position: absolute"/>
+  </div>
 </template>
 ```
 
@@ -133,36 +147,36 @@ onMounted(() => {
 ```vue
 <script setup>
 import { onMounted, ref } from "vue";
-import { useFatinaRaf, animate, easingInOutSine, easingOutElastic, easingOutQuad } from "fatina";
+import { useFatinaAuto, animateCSS, easingInOutSine, easingOutElastic, easingOutQuad } from "fatina";
 
 // initialize update loop
-useFatinaRaf();
+useFatinaAuto();
 
 const img1 = ref();
 const img2 = ref();
 const img3 = ref();
 onMounted(() => {
     // get images to animates
-    const animate1 = animate(img1.value);
-    const animate2 = animate(img2.value);
-    const animate3 = animate(img3.value);
+    const animate1 = animateCSS(img1.value);
+    const animate2 = animateCSS(img2.value);
+    const animate3 = animateCSS(img3.value);
 
     const randomPosition = () => ({
-      "style.left": Math.random() * 300,
-      "style.top": Math.random() * 100
+      left: `${Math.round(Math.random() * 300)}px`,
+      top: `${Math.round(Math.random() * 100)}px`
     })
 
     // create a list of 30 random moves for each img
     for (let i = 0; i < 30; i++) {
-      animate1.to(randomPosition(), 1000, { unit: 'px', easing: easingOutQuad })
-      animate2.to(randomPosition(), 1000, { unit: 'px', easing: easingOutElastic })
-      animate3.to(randomPosition(), 1000, { unit: 'px', easing: easingInOutSine })
+      animate1.to(randomPosition(), 1000, { easing: easingOutQuad })
+      animate2.to(randomPosition(), 1000, { easing: easingOutElastic })
+      animate3.to(randomPosition(), 1000, { easing: easingInOutSine })
     }
 
     // final position
-    animate1.to({ "style.left": 100, "style.top": 20 }, 2500, { unit: 'px' })
-    animate2.to({ "style.left": 200, "style.top": 20 }, 2500, { unit: 'px' })
-    animate3.to({ "style.left": 300, "style.top": 20 }, 2500, { unit: 'px' })
+    animate1.to({ left: "100px", top: "20px" }, 2500)
+    animate2.to({ left: "200px", top: "20px" }, 2500)
+    animate3.to({ left: "300px", top: "20px" }, 2500)
 });
 </script>
 
