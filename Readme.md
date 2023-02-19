@@ -29,11 +29,15 @@ When good enough, it will probably be merged back in the main repo and become fa
 
 ### API Idea
 
+#### Generic
 ```ts
 // single animation 1s
 animate(obj).to({ x: 2 }, 1000)
 
-// nested properties
+// batch animation
+animate([obj1, obj2]).to({ x: 2 }, 1000)
+
+// animate nested properties
 animate(obj).to({ "position.x": 200, opacity: 1 }, 1000)
 
 // async
@@ -70,4 +74,31 @@ animate(obj)
     .on(() => console.log('Started'))
     .to({ "position.x": 200, opacity: 1 }, 1000)
     .on(() => console.log('Completed'))
+```
+
+#### Integrations
+and provide dedicated integration
+* `from "fatina/css"`:
+  * Handle units (px, %, em, ...)
+  * Handle string, colors (background, border, transform)
+  * Handle web usage (Text typing, counter animation, ...)
+* `from "fatina/pixi"`:
+  * Handle sprite
+
+with a similar signature
+```ts
+// automatically handle unit 
+animate(div.style).to({
+  "background-color": #FF0000,
+  "border-radius": "5px"
+}, 1000)
+
+// allow for css selector usage
+animate(".bunny").to({
+  "background-color": #FF0000,
+  "border-radius": "5px"
+}, 1000)
+
+// provide new features
+animate(div).typing({ value: "this is a long text" }, 1000)
 ```
