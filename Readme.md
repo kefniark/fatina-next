@@ -14,6 +14,7 @@ The original project is more than 5 year old and a small cleanup seems necessary
 - ESM build & Tree shaking
     - No more `Fatina` object
     - Even smaller in user project
+    - Simpler and more intuitive to use
 - Better and simpler API (Composition API)
     - No more plugins system (can be composited)
     - No more `start()`
@@ -75,29 +76,31 @@ animate(obj)
     .on(() => console.log('Completed'))
 ```
 
-#### Integrations
-and provide dedicated integration
-* `from "fatina/css"`:
+#### Different Integrations
+Provide optional integration directly under Fatina package.
+Thanks to tree-shaking, no need to separate under different namespaces or packages, only what is used will be embeded. 
+
+* For CSS : `import { animateCSS } from "fatina"`
   * Handle units (px, %, em, ...)
   * Handle string, colors (background, border, transform)
   * Handle web usage (Text typing, counter animation, ...)
-* `from "fatina/pixi"`:
+* For PIXI.js: `import { animatePixi } from "fatina"`
   * Handle sprite
 
 with a similar signature
 ```ts
 // automatically handle unit 
-animate(div.style).to({
-  "background-color": #FF0000,
-  "border-radius": "5px"
+animateCSS(div).to({
+  backgroundColor: "#FF0000",
+  borderRadius: "5px"
 }, 1000)
 
 // allow for css selector usage
-animate(".bunny").to({
-  "background-color": #FF0000,
-  "border-radius": "5px"
+animateCSS(".bunny").to({
+  color: "#FF0000",
+  fontSize: "24px"
 }, 1000)
 
 // provide new features
-animate(div).typing({ value: "this is a long text" }, 1000)
+animateCSS(div).typing({ value: "this is a long text" }, 1000)
 ```
