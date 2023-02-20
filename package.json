@@ -6,7 +6,7 @@
     "scripts": {
         "build": "turbo build",
         "lib:build": "turbo run lib:build",
-        "lint": "run-p format:*",
+        "lint": "run-p lint:*",
         "lint:eslint": "eslint --ext .js,.ts,.vue --fix ./",
         "lint:prettier": "prettier --write \"**/*.{json,md}\"",
         "test": "run-p test:*",

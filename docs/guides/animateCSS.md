@@ -4,8 +4,9 @@ Fatina can also help you to animate DOM elements.
 
 For that we have `animateCSS` where you can directly pass elements (`div`, `input`, `img`, ...), give some CSS rules to animate and we take care of the rest
 
--   best defaults
--   unit conversions (`#FFFFFF`, `px`, `%`, `rem`, ...)
+-   Best defaults
+-   Unit conversions (`#FFFFFF`, `px`, `%`, `rem`, ...)
+-   Automatically compute style
 
 ## Basic Usage
 
@@ -18,9 +19,9 @@ import { animateCSS } from 'fatina'
 
 animateCSS(div)
     .delay(1000)
-    .to({ background: '#000000', color: '#FFFFFF' }, 500)
+    .to({ backgroundColor: '#000000', color: '#FFFFFF' }, 500)
     .to({ fontSize: '24px' }, 1000)
-    .to({ paddingLeft: '50px' }, 500)
+    .to({ width: '200px' }, 500)
     .to({ translate: '50px' }, 500)
     .to({ scale: 0.5 }, 500)
     .to({ rotate: '360deg' }, 500)
@@ -39,12 +40,13 @@ import { animateCSS } from 'fatina'
 export function anim(div: HTMLElement) {
     animateCSS(div)
         .delay(1000)
-        .to({ background: '#000000', color: '#FFFFFF' }, 500)
+        .to({ backgroundColor: '#000000', color: '#FFFFFF' }, 500)
         .to({ fontSize: '24px' }, 1000)
         .to({ width: '200px' }, 500)
         .to({ translate: '50px' }, 500)
         .to({ scale: 0.5 }, 500)
         .to({ rotate: '360deg' }, 500)
+        .to({ translate: '20px' }, 500)
         .on(() => console.log('Animation Completed!'))
 }
 ```
@@ -103,3 +105,7 @@ onMounted(() => anim(container.value))
 ```
 
 :::
+
+## API
+
+Soon

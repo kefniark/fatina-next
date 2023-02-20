@@ -1,12 +1,13 @@
 import { animate, AnimationSettings } from '../core'
-import { FieldColor, FieldUnit } from './fields'
+import { FieldColor, FieldUnit, FieldWithoutUnit } from './fields'
 
-const units = ['px', '%', 'em', 'rem', 'vh', 'vw', 'vmin', 'vmax', 'deg']
-function extractUnit(val: string | number | undefined) {
-    if (!val || typeof val === 'number') return null
+const units = ['px', '%', 'em', 'rem', 'vh', 'vw', 'vmin', 'vmax', 'deg', 'cm', 'mm', 'in', 'pt', 'pc', 'ch']
+
+function extractUnit(el: HTMLElement, prop: keyof CSSStyleDeclaration, val: string | number | undefined) {
+    if (!val || typeof val === 'number') return FieldWithoutUnit(el, prop, val as number)
     const unit = (val as string).replace(/[0-9]/g, '').trim().toLowerCase()
-    if (unit.startsWith('#')) return FieldColor(val)
-    if (units.includes(unit)) return FieldUnit(val, unit)
+    if (unit.startsWith('#')) return FieldColor(el, prop, val)
+    if (units.includes(unit)) return FieldUnit(el, prop, val, unit)
     return null
 }
 
@@ -26,7 +27,7 @@ export function animateCSS<T extends HTMLElement>(obj: T) {
         to(props: Partial<CSSStyleDeclaration>, duration: number, options?: Partial<AnimationSettings>) {
             const properties = Object.fromEntries(
                 Object.entries(props).map((x) => {
-                    const unit = extractUnit(x[1] as string | number)
+                    const unit = extractUnit(obj, x[0] as any, x[1] as string | number)
                     if (unit) return [x[0], unit]
                     return [x[0], x[1]] as [string, number]
                 })

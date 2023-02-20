@@ -89,12 +89,12 @@ update(5000)
 import { onMounted, ref } from 'vue'
 import { useFatinaAuto, animateCSS } from 'fatina'
 
+// initialize update loop
+useFatinaAuto()
+
 const bg = ref()
 const img = ref()
 onMounted(() => {
-    // initialize update loop
-    useFatinaAuto()
-
     // animate
     animateCSS(img.value).to({ left: '300px' }, 1000)
 

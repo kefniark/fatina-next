@@ -77,3 +77,7 @@ onMounted(() => {
 ```
 
 :::
+
+## API
+
+Soon

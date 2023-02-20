@@ -1,18 +1,38 @@
 import { FieldWrapper } from '../core'
 
-export const unitFields = {
-    px: ['width', 'height', 'top', 'left', 'right', 'bottom', 'margin', 'padding', 'borderWidth'],
-    colors: ['backgroundColor', 'borderColor', 'color']
-}
-
 const EPSILON = 0.000001
 function roundTo(value: number, decimals = 4) {
     return +value.toFixed(decimals + EPSILON)
 }
 
-export const FieldUnit = (value: string, unit: string) =>
+const camelToSnake = (val: string) => val.replace(/[A-Z]/g, (m) => '-' + m.toLowerCase())
+
+export const FieldWithoutUnit = (el: HTMLElement, prop: keyof CSSStyleDeclaration, value: number) =>
     ({
         init() {
+            const style = getComputedStyle(el)
+            if (!el.style[prop]) {
+                ;(el.style as any)[prop] = style.getPropertyValue(camelToSnake(prop.toString()))
+            }
+            this.valueParsed = this.parse(value)
+        },
+        parse: (val: number): number => val ?? 0,
+        serialize: (val: number): number => roundTo(val),
+        zero: () => 0,
+        mul: (val1: number, val2: number) => val1 * val2,
+        add: (val1: number, val2: number) => val1 + val2,
+        sub: (val1: number, val2: number) => val1 - val2,
+        value,
+        valueParsed: 0
+    } as FieldWrapper<number>)
+
+export const FieldUnit = (el: HTMLElement, prop: keyof CSSStyleDeclaration, value: string, unit: string) =>
+    ({
+        init() {
+            const style = getComputedStyle(el)
+            if (!el.style[prop]) {
+                ;(el.style as any)[prop] = style.getPropertyValue(camelToSnake(prop.toString()))
+            }
             this.valueParsed = this.parse(value)
         },
         parse: (val: string): number => parseInt(val, 10) || 0,
@@ -119,8 +139,12 @@ function toHex(color: Color): string {
     return `#${toHexByte(rgb[0])}${toHexByte(rgb[1])}${toHexByte(rgb[2])}`
 }
 
-export const FieldColor = (value: string) => ({
+export const FieldColor = (el: HTMLElement, prop: keyof CSSStyleDeclaration, value: string) => ({
     init() {
+        const style = getComputedStyle(el)
+        if (!el.style[prop]) {
+            ;(el.style as any)[prop] = style.getPropertyValue(camelToSnake(prop.toString()))
+        }
         this.valueParsed = this.parse(value) as unknown as number
     },
     parse(val: string): Color {
