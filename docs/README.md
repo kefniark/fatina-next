@@ -1,43 +1,46 @@
 ---
+
 home: true
 icon: home
-title: Project home
+title: Home
 heroImage: /logo.svg
 heroText: Fatina
 tagline: Lighweight Tweening Library for Games / Web
 actions:
-  - text: Getting Started 💡
+
+-   text: Getting Started 💡
     link: /getting-started/
     type: primary
 
-  - text: Guides
+-   text: Guides
     link: /guides/
 
-  - text: API
+-   text: API
     link: /api/
 
 features:
-  - title: Easy to use
+
+-   title: Easy to use
     icon: layout
     details: Intuitive and fully typed API, save time and avoid errors
 
-  - title: Smooth Animations
+-   title: Smooth Animations
     icon: markdown
     details: Describe what animation you want, we take care of the rest
 
-  - title: Lightweight
+-   title: Lightweight
     icon: layout
     details: Designed with Tree shaking in mind, only few KB in your projects
 
-  - title: Runs everywhere
+-   title: Runs everywhere
     icon: slides
     details: Modern ESM Build first (Browser, Nodejs, Deno) and CommonJS fallback for old nodeJS.
 
-  - title: Composition API
+-   title: Composition API
     icon: markdown
     details: Only use the part you need and easily extend the features
 
-  - title: Robust
+-   title: Robust
     icon: slides
     details: Fully tested & 100% code coverage
 

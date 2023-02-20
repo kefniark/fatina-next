@@ -1,26 +1,37 @@
 {
-  "name": "fatina-workspace",
-  "version": "1.0.0",
-  "description": "Fatina",
-  "private": true,
-  "scripts": {
-    "build": "turbo build",
-    "lib:build": "turbo run lib:build",
-    "lint": "eslint .",
-    "test": "turbo test"
-  },
-  "workspaces": {
-    "packages": [
-      "packages/*",
-      "examples/*",
-      "docs"
-    ]
-  },
-  "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.52.0",
-    "@typescript-eslint/parser": "^5.52.0",
-    "eslint": "^8.34.0",
-    "turbo": "^1.8.1",
-    "typescript": "^4.9.5"
-  }
+    "name": "fatina-workspace",
+    "version": "1.0.0",
+    "description": "Fatina",
+    "private": true,
+    "scripts": {
+        "build": "turbo build",
+        "lib:build": "turbo run lib:build",
+        "lint": "run-p format:*",
+        "lint:eslint": "eslint --ext .js,.ts,.vue --fix ./",
+        "lint:prettier": "prettier --write \"**/*.{json,md}\"",
+        "test": "run-p test:*",
+        "test:packages": "turbo test",
+        "test:eslint": "eslint --ext .js,.ts,.vue ./",
+        "test:prettier": "prettier --check \"**/*.{json,md}\""
+    },
+    "workspaces": {
+        "packages": [
+            "packages/*",
+            "examples/*",
+            "docs"
+        ]
+    },
+    "devDependencies": {
+        "@typescript-eslint/eslint-plugin": "^5.52.0",
+        "@typescript-eslint/parser": "^5.52.0",
+        "@vue/eslint-config-typescript": "^11.0.2",
+        "eslint": "^8.34.0",
+        "eslint-config-prettier": "^8.6.0",
+        "eslint-plugin-prettier": "^4.2.1",
+        "eslint-plugin-vue": "^9.9.0",
+        "prettier": "^2.8.4",
+        "turbo": "^1.8.1",
+        "typescript": "^4.9.5",
+        "vue-eslint-parser": "^9.1.0"
+    }
 }

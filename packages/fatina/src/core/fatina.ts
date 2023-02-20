@@ -16,7 +16,8 @@ export function useFatinaAuto() {
     if (currentFatinaAuto) return currentFatinaAuto
 
     // if possible use requestAnimationFrame
-    if (!!globalThis.requestAnimationFrame) return useFatinaRaf()
+    // @ts-ignore
+    if (globalThis.requestAnimationFrame) return useFatinaRaf()
 
     // fallback on setInterval
     const fatina = useFatina()
@@ -40,21 +41,21 @@ export function useFatinaAuto() {
 function useFatinaRaf() {
     const fatina = useFatina()
 
-    const frameRate = 1000 / 60;
-    let lastFrame = 0;
+    const frameRate = 1000 / 60
+    let lastFrame = 0
     let deltaTime = 0
-    let startTime: number | undefined;
+    let startTime: number | undefined
     let raf: number
 
     const handler = (time: number) => {
         if (startTime === undefined) {
-            startTime = time;
+            startTime = time
         } else {
-            const currentFrame = Math.round((time - startTime) / frameRate);
-            deltaTime = (currentFrame - lastFrame) * frameRate;
-            lastFrame = currentFrame;
+            const currentFrame = Math.round((time - startTime) / frameRate)
+            deltaTime = (currentFrame - lastFrame) * frameRate
+            lastFrame = currentFrame
         }
-        
+
         fatina.update(deltaTime)
         raf = globalThis.requestAnimationFrame(handler)
     }
@@ -78,16 +79,16 @@ export function useFatina() {
             elapsed += dt
 
             if (ticks_remove.size > 0) {
-                ticks_remove.forEach(x => ticks.delete(x))
+                ticks_remove.forEach((x) => ticks.delete(x))
                 ticks_remove.clear()
             }
 
             if (ticks_add.size > 0) {
-                ticks_add.forEach(x => ticks.add(x))
+                ticks_add.forEach((x) => ticks.add(x))
                 ticks_add.clear()
             }
 
-            ticks.forEach(x => x(dt))
+            ticks.forEach((x) => x(dt))
         }
     }
 }

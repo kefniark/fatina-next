@@ -1,32 +1,43 @@
-import { FieldWrapper } from "../core"
+import { FieldWrapper } from '../core'
 
 export const unitFields = {
     px: ['width', 'height', 'top', 'left', 'right', 'bottom', 'margin', 'padding', 'borderWidth'],
-    colors: ['backgroundColor', 'borderColor', 'color'],
+    colors: ['backgroundColor', 'borderColor', 'color']
 }
 
 const EPSILON = 0.000001
 function roundTo(value: number, decimals = 4) {
-	return +value.toFixed(decimals + EPSILON)
+    return +value.toFixed(decimals + EPSILON)
 }
 
-export const FieldUnit = (value: string, unit: string) => ({
-    parse: (val: string): number => parseInt(val, 10) || 0,
-    serialize: (val: number): string => `${roundTo(val)}${unit}`,
-    zero: () => 0,
-    mul: (val1: number, val2: number) => val1 * val2,
-    add: (val1: number, val2: number) => val1 + val2,
-    sub: (val1: number, val2: number) => val1 - val2,
-    value
-} as FieldWrapper<string>)
+export const FieldUnit = (value: string, unit: string) =>
+    ({
+        init() {
+            this.valueParsed = this.parse(value)
+        },
+        parse: (val: string): number => parseInt(val, 10) || 0,
+        serialize: (val: number): string => `${roundTo(val)}${unit}`,
+        zero: () => 0,
+        mul: (val1: number, val2: number) => val1 * val2,
+        add: (val1: number, val2: number) => val1 + val2,
+        sub: (val1: number, val2: number) => val1 - val2,
+        value,
+        valueParsed: 0
+    } as FieldWrapper<string>)
 
 type Color = [number, number, number]
 
 function fromHex(hex: string) {
     if (hex.startsWith('rgb')) {
-        return fromRGB(hex.split("(")[1].split(")")[0].split(",").map(x => parseInt(x, 10)) as [number, number, number])
+        return fromRGB(
+            hex
+                .split('(')[1]
+                .split(')')[0]
+                .split(',')
+                .map((x) => parseInt(x, 10)) as [number, number, number]
+        )
     }
-    if (hex.substring(0, 1) == "#") hex = hex.substring(1)
+    if (hex.substring(0, 1) == '#') hex = hex.substring(1)
     const r = parseInt(hex.substring(0, 2), 16)
     const g = parseInt(hex.substring(2, 4), 16)
     const b = parseInt(hex.substring(4, 6), 16)
@@ -83,7 +94,7 @@ function hue2rgb(p: number, q: number, t: number) {
 
 function toHexByte(number: number) {
     let hexByte = number.toString(16)
-    if (hexByte.length < 2) hexByte = "0" + hexByte
+    if (hexByte.length < 2) hexByte = '0' + hexByte
     return hexByte.toLowerCase()
 }
 
@@ -104,20 +115,20 @@ function toHex(color: Color): string {
         b = hue2rgb(p, q, h - 1 / 3)
     }
 
-    const rgb: Color = [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+    const rgb: Color = [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)]
     return `#${toHexByte(rgb[0])}${toHexByte(rgb[1])}${toHexByte(rgb[2])}`
 }
 
 export const FieldColor = (value: string) => ({
+    init() {
+        this.valueParsed = this.parse(value) as unknown as number
+    },
     parse(val: string): Color {
         if (!val) return [0, 0, 0]
         return fromHex(val)
     },
     serialize(val: Color) {
         return toHex(val)
-    },
-    zero() {
-        return [0, 0, 0]
     },
     mul(val1: Color, val2: number) {
         return [val1[0] * val2, val1[1] * val2, val1[2] * val2] as Color
@@ -128,5 +139,6 @@ export const FieldColor = (value: string) => ({
     sub(val1: Color, val2: Color) {
         return [val1[0] - val2[0], val1[1] - val2[1], val1[2] - val2[2]] as Color
     },
-    value
+    value,
+    valueParsed: 0
 })

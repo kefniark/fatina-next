@@ -1,12 +1,12 @@
 {
-  "name": "fatina-commonjs",
-  "version": "1.0.0",
-  "description": "Fatina",
-  "private": true,
-  "scripts": {
-    "dev": "node ./index.js"
-  },
-  "dependencies": {
-    "fatina": "*"
-  }
+    "name": "fatina-commonjs",
+    "version": "1.0.0",
+    "description": "Fatina",
+    "private": true,
+    "scripts": {
+        "dev": "node ./index.js"
+    },
+    "dependencies": {
+        "fatina": "*"
+    }
 }

@@ -3,25 +3,28 @@ import { navbar } from "vuepress-theme-hope";
 export default navbar([
   "/",
   { text: "Getting Started", icon: "discover", link: "/getting-started/" },
-  // {
-  //   text: "Guide",
-  //   icon: "creative",
-  //   prefix: "/guide/",
-  //   children: [
-  //     {
-  //       text: "Bar",
-  //       icon: "creative",
-  //       prefix: "bar/",
-  //       children: ["baz", { text: "...", icon: "more", link: "" }],
-  //     },
-  //     {
-  //       text: "Foo",
-  //       icon: "config",
-  //       prefix: "foo/",
-  //       children: ["ray", { text: "...", icon: "more", link: "" }],
-  //     },
-  //   ],
-  // },
+  {
+    text: "Components",
+    icon: "creative",
+    prefix: "/guides/",
+    children: [
+      {
+        text: "Animate",
+        icon: "creative",
+        link: "animate/"
+      },
+      {
+        text: "AnimateCSS",
+        icon: "creative",
+        link: "animateCSS/"
+      },
+      {
+        text: "AnimateTypo",
+        icon: "config",
+        link: "animateTypo/"
+      },
+    ],
+  },
   // {
   //   text: "V2 Docs",
   //   icon: "note",

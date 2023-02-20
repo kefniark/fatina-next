@@ -1,4 +1,4 @@
-const { useFatina, animate } = require('fatina');
+const { useFatina, animate } = require('fatina')
 
 const { update } = useFatina()
 

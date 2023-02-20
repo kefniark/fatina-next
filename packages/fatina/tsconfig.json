@@ -1,27 +1,27 @@
 {
-  "compilerOptions": {
-    "baseUrl": "./",
-    "outDir": "dist",
-    "declaration": true,
-    "allowJs": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "jsx": "preserve",
-    "module": "esnext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "preserveSymlinks": true,
-    "sourceMap": true,
-    "declarationMap": true,
-    "strict": true,
-    "target": "ESNext",
-    "skipLibCheck": true,
-    "lib": ["ESNext", "DOM"],
-    "paths": {
-      "@src/*": ["src/*"],
+    "compilerOptions": {
+        "baseUrl": "./",
+        "outDir": "dist",
+        "declaration": true,
+        "allowJs": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "jsx": "preserve",
+        "module": "esnext",
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "preserveSymlinks": true,
+        "sourceMap": true,
+        "declarationMap": true,
+        "strict": true,
+        "target": "ESNext",
+        "skipLibCheck": true,
+        "lib": ["ESNext", "DOM"],
+        "paths": {
+            "@src/*": ["src/*"]
+        },
+        "types": ["vite/client", "vitest/globals"]
     },
-    "types": ["vite/client", "vitest/globals"]
-  },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.vue"],
-  "exclude": ["dist", "node_modules"]
+    "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.vue"],
+    "exclude": ["dist", "node_modules"]
 }

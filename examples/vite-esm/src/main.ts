@@ -1,4 +1,4 @@
-import { useFatinaAuto, animate } from "fatina"
+import { useFatinaAuto, animate } from 'fatina'
 
 useFatinaAuto()
 

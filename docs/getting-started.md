@@ -31,28 +31,28 @@ npm i -D fatina@next
 @tab:active web
 
 ```ts
-import { useFatinaAuto, animate } from "fatina"
+import { useFatinaAuto, animate } from 'fatina'
 
 // to run once : start the update loop
 useFatinaAuto()
 
 const jsObject = { a: 0 }
 
-// create a 1000ms animation 
+// create a 1000ms animation
 animate(jsObject).to({ a: 100 }, 1000)
 ```
 
 @tab nodejs
 
 ```ts
-const { useFatina, animate } = require('fatina');
+const { useFatina, animate } = require('fatina')
 
 // get the method to manually update animations
 const { update } = useFatina()
 
 const jsObject = { a: 0 }
 
-// create a 1000ms animation 
+// create a 1000ms animation
 animate(obj).to({ a: 100 }, 1000)
 
 // then manually tick the update loop (here 5000ms)
@@ -69,7 +69,7 @@ const { update } = useFatina()
 
 const jsObject = { a: 0 }
 
-// create a 1000ms animation 
+// create a 1000ms animation
 animate(jsObject).to({ a: 100 }, 1000)
 
 // then manually tick the update loop (here 5000ms)
@@ -77,7 +77,6 @@ update(5000)
 ```
 
 :::
-
 
 ## Demo
 
@@ -87,35 +86,35 @@ update(5000)
 
 ```vue
 <script setup>
-import { onMounted, ref } from "vue";
-import { useFatinaAuto, animateCSS } from "fatina";
+import { onMounted, ref } from 'vue'
+import { useFatinaAuto, animateCSS } from 'fatina'
 
-const bg = ref();
-const img = ref();
+const bg = ref()
+const img = ref()
 onMounted(() => {
     // initialize update loop
-    useFatinaAuto();
-    
-    // animate
-    animateCSS(img.value).to({ left: "300px" }, 1000)
+    useFatinaAuto()
 
-    bg.value.style.background = "#FFFFFF"
+    // animate
+    animateCSS(img.value).to({ left: '300px' }, 1000)
+
+    bg.value.style.background = '#FFFFFF'
     animateCSS(bg.value)
-      .to({ background: "#FF0000" }, 2000)
-      .to({ background: "#FFFF00" }, 2000)
-      .to({ background: "#FFFFFF" }, 2000)
-      .to({ background: "#00FFFF" }, 2000)
-      .to({ background: "#0000FF" }, 2000)
-      .to({ background: "#FF00FF" }, 2000)
-      .to({ background: "#000000" }, 2000)
-      .to({ background: "#FFFFFF" }, 2000)
-});
+        .to({ background: '#FF0000' }, 2000)
+        .to({ background: '#FFFF00' }, 2000)
+        .to({ background: '#FFFFFF' }, 2000)
+        .to({ background: '#00FFFF' }, 2000)
+        .to({ background: '#0000FF' }, 2000)
+        .to({ background: '#FF00FF' }, 2000)
+        .to({ background: '#000000' }, 2000)
+        .to({ background: '#FFFFFF' }, 2000)
+})
 </script>
 
 <template>
-  <div ref="bg" style="height: 100px;">
-    <img ref="img" src="https://pixijs.io/examples/examples/assets/bunny.png" style="position: absolute"/>
-  </div>
+    <div ref="bg" style="height: 100px;">
+        <img ref="img" src="https://pixijs.io/examples/examples/assets/bunny.png" style="position: absolute" />
+    </div>
 </template>
 ```
 
@@ -123,9 +122,9 @@ onMounted(() => {
 
 ```json
 {
-  "imports": {
-    "fatina": "/fatina-next/fatina/fatina.js"
-  }
+    "imports": {
+        "fatina": "/fatina-next/fatina/fatina.js"
+    }
 }
 ```
 
@@ -133,11 +132,13 @@ onMounted(() => {
 
 ```json
 {
-  "showCompileOutput": false,
-  "showImportMap": false,
-  "ssr": false
+    "autoResize": true,
+    "showCode": false,
+    "showImportMap": false,
+    "layout": "horizontal"
 }
 ```
+
 :::
 
 ::: vue-playground Sequence of moves
@@ -146,44 +147,44 @@ onMounted(() => {
 
 ```vue
 <script setup>
-import { onMounted, ref } from "vue";
-import { useFatinaAuto, animateCSS, easingInOutSine, easingOutElastic, easingOutQuad } from "fatina";
+import { onMounted, ref } from 'vue'
+import { useFatinaAuto, animateCSS, easingInOutSine, easingOutElastic, easingOutQuad } from 'fatina'
 
 // initialize update loop
-useFatinaAuto();
+useFatinaAuto()
 
-const img1 = ref();
-const img2 = ref();
-const img3 = ref();
+const img1 = ref()
+const img2 = ref()
+const img3 = ref()
 onMounted(() => {
     // get images to animates
-    const animate1 = animateCSS(img1.value);
-    const animate2 = animateCSS(img2.value);
-    const animate3 = animateCSS(img3.value);
+    const animate1 = animateCSS(img1.value)
+    const animate2 = animateCSS(img2.value)
+    const animate3 = animateCSS(img3.value)
 
     const randomPosition = () => ({
-      left: `${Math.round(Math.random() * 300)}px`,
-      top: `${Math.round(Math.random() * 100)}px`
+        left: `${Math.round(Math.random() * 300)}px`,
+        top: `${Math.round(Math.random() * 100)}px`
     })
 
     // create a list of 30 random moves for each img
     for (let i = 0; i < 30; i++) {
-      animate1.to(randomPosition(), 1000, { easing: easingOutQuad })
-      animate2.to(randomPosition(), 1000, { easing: easingOutElastic })
-      animate3.to(randomPosition(), 1000, { easing: easingInOutSine })
+        animate1.to(randomPosition(), 1000, { easing: easingOutQuad })
+        animate2.to(randomPosition(), 1000, { easing: easingOutElastic })
+        animate3.to(randomPosition(), 1000, { easing: easingInOutSine })
     }
 
     // final position
-    animate1.to({ left: "100px", top: "20px" }, 2500)
-    animate2.to({ left: "200px", top: "20px" }, 2500)
-    animate3.to({ left: "300px", top: "20px" }, 2500)
-});
+    animate1.to({ left: '100px', top: '20px' }, 2500)
+    animate2.to({ left: '200px', top: '20px' }, 2500)
+    animate3.to({ left: '300px', top: '20px' }, 2500)
+})
 </script>
 
 <template>
-  <img ref="img1" src="https://pixijs.io/examples/examples/assets/bunny.png" style="position: absolute"/>
-  <img ref="img2" src="https://pixijs.io/examples/examples/assets/bunny.png" style="position: absolute"/>
-  <img ref="img3" src="https://pixijs.io/examples/examples/assets/bunny.png" style="position: absolute"/>
+    <img ref="img1" src="https://pixijs.io/examples/examples/assets/bunny.png" style="position: absolute" />
+    <img ref="img2" src="https://pixijs.io/examples/examples/assets/bunny.png" style="position: absolute" />
+    <img ref="img3" src="https://pixijs.io/examples/examples/assets/bunny.png" style="position: absolute" />
 </template>
 ```
 
@@ -191,9 +192,9 @@ onMounted(() => {
 
 ```json
 {
-  "imports": {
-    "fatina": "/fatina-next/fatina/fatina.js"
-  }
+    "imports": {
+        "fatina": "/fatina-next/fatina/fatina.js"
+    }
 }
 ```
 
@@ -201,9 +202,10 @@ onMounted(() => {
 
 ```json
 {
-  "showCompileOutput": false,
-  "showImportMap": false,
-  "ssr": false
+    "showCompileOutput": false,
+    "showImportMap": false,
+    "ssr": false
 }
 ```
+
 :::

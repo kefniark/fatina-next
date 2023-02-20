@@ -11,26 +11,28 @@ This repo is a reboot of [**Fatina**](https://github.com/kefniark/Fatina), The m
 The original project is more than 5 year old and a small cleanup seems necessary.
 
 ### Goals
-- ESM build & Tree shaking
-    - No more `Fatina` object
-    - Even smaller in user project
-    - Simpler and more intuitive to use
-- Better and simpler API (Composition API)
-    - No more plugins system (can be composited)
-    - No more `start()`
-    - Fully typed (less error prone)
-    - By default accept nested properties
-    - Auto resolve animation conflicts
-    - Every tween is a sequence by default
-- Better and faster tooling
-    - Mono Repo
-    - Brand new docs with vuepress
+
+-   ESM build & Tree shaking
+    -   No more `Fatina` object
+    -   Even smaller in user project
+    -   Simpler and more intuitive to use
+-   Better and simpler API (Composition API)
+    -   No more plugins system (can be composited)
+    -   No more `start()`
+    -   Fully typed (less error prone)
+    -   By default accept nested properties
+    -   Auto resolve animation conflicts
+    -   Every tween is a sequence by default
+-   Better and faster tooling
+    -   Mono Repo
+    -   Brand new docs with vuepress
 
 When good enough, it will probably be merged back in the main repo and become fatina@v4.x
 
 ### API Idea
 
 #### Generic
+
 ```ts
 // single animation 1s
 animate(obj).to({ x: 2 }, 1000)
@@ -39,7 +41,7 @@ animate(obj).to({ x: 2 }, 1000)
 animate([obj1, obj2]).to({ x: 2 }, 1000)
 
 // animate nested properties
-animate(obj).to({ "position.x": 200, opacity: 1 }, 1000)
+animate(obj).to({ 'position.x': 200, opacity: 1 }, 1000)
 
 // async
 await animate(obj).to({ x: 2 }, 1000).async()
@@ -52,18 +54,14 @@ animate(obj).to({ x: 200 }, 1000, {
 })
 
 // sequence of 3s
-animate(obj)
-  .to({ x: 200 }, 1000)
-  .to({ x: 400 }, 1000)
-  .to({ x: 600 }, 1000)
+animate(obj).to({ x: 200 }, 1000).to({ x: 400 }, 1000).to({ x: 600 }, 1000)
 
 // parallel, with different strategies (like Promise.all, Promise.any)
 animate(obj)
-  .parallel((sub) => {
-    sub.to({ x: 0 }, 1000)
-       .to({ opacity: 0 }, 250)
-  })
-  .to({ x: 200, opacity: 1 }, 1000)
+    .parallel((sub) => {
+        sub.to({ x: 0 }, 1000).to({ opacity: 0 }, 250)
+    })
+    .to({ x: 200, opacity: 1 }, 1000)
 
 // animation information
 const { stats } = animate(obj).to({ x: 2 }, 1000).to({ x: 4 }, 1000)
@@ -72,35 +70,45 @@ const { progress, isRunning } = stats
 // simpler events
 animate(obj)
     .on(() => console.log('Started'))
-    .to({ "position.x": 200, opacity: 1 }, 1000)
+    .to({ 'position.x': 200, opacity: 1 }, 1000)
     .on(() => console.log('Completed'))
 ```
 
 #### Different Integrations
-Provide optional integration directly under Fatina package.
-Thanks to tree-shaking, no need to separate under different namespaces or packages, only what is used will be embeded. 
 
-* For CSS : `import { animateCSS } from "fatina"`
-  * Handle units (px, %, em, ...)
-  * Handle string, colors (background, border, transform)
-  * Handle web usage (Text typing, counter animation, ...)
-* For PIXI.js: `import { animatePixi } from "fatina"`
-  * Handle sprite
+Provide optional integration directly under Fatina package.
+Thanks to tree-shaking, no need to separate under different namespaces or packages, only what is used will be embeded.
+
+-   For CSS : `import { animateCSS } from "fatina"`
+    -   Handle units (px, %, em, ...)
+    -   Handle string, colors (background, border, transform)
+    -   Handle web usage (Text typing, counter animation, ...)
+-   For PIXI.js: `import { animatePixi } from "fatina"`
+    -   Handle sprite
 
 with a similar signature
+
 ```ts
-// automatically handle unit 
-animateCSS(div).to({
-  backgroundColor: "#FF0000",
-  borderRadius: "5px"
-}, 1000)
+// automatically handle unit
+animateCSS(div).to(
+    {
+        backgroundColor: '#FF0000',
+        borderRadius: '5px'
+    },
+    1000
+)
 
 // allow for css selector usage
-animateCSS(".bunny").to({
-  color: "#FF0000",
-  fontSize: "24px"
-}, 1000)
+animateCSS('.bunny').to(
+    {
+        color: '#FF0000',
+        fontSize: '24px'
+    },
+    1000
+)
 
 // provide new features
-animateCSS(div).typing({ value: "this is a long text" }, 1000)
+animateCSS(div).typing({ value: 'this is a long text' }, 1000)
+
+animateTypo(div).append('Hello there').delay(500).append(', how are you today').delay(250).append('?')
 ```

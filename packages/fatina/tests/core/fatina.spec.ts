@@ -11,7 +11,7 @@ describe('core > fatina', () => {
     })
 
     it('should be able to automatically tick', async () => {
-        const { update, elapsed } = useFatinaAuto()
+        const { elapsed } = useFatinaAuto()
 
         expect(elapsed()).toBe(0)
         await new Promise<void>((resolve) => setTimeout(resolve, 1000))
@@ -29,13 +29,13 @@ describe('core > fatina', () => {
 
     it('can dispose', async () => {
         const { elapsed, dispose } = useFatinaAuto()
-        
+
         await new Promise<void>((resolve) => setTimeout(resolve, 250))
         const elapsed1 = elapsed()
         expect(elapsed1).toBeGreaterThan(0)
         dispose()
 
-        await new Promise<void>((resolve) => setTimeout(resolve, 250))     
+        await new Promise<void>((resolve) => setTimeout(resolve, 250))
         expect(elapsed()).toBe(elapsed1)
     })
 })

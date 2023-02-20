@@ -1,19 +1,19 @@
 {
-  "name": "fatina-sample",
-  "version": "0.0.1",
-  "description": "",
-  "private": true,
-  "type": "module",
-  "license": "UNLICENSED",
-  "scripts": {
-    "dev": "vite",
-    "clean": "rm -rf ./node_modules ./dist",
-    "build": "rm -rf ./dist && vite build"
-  },
-  "devDependencies": {
-    "fatina": "*",
-    "npm-run-all": "^4.1.5",
-    "typescript": "^4.9.5",
-    "vite": "^4.1.0"
-  }
+    "name": "fatina-sample",
+    "version": "0.0.1",
+    "description": "",
+    "private": true,
+    "type": "module",
+    "license": "UNLICENSED",
+    "scripts": {
+        "dev": "vite",
+        "clean": "rm -rf ./node_modules ./dist",
+        "build": "rm -rf ./dist && vite build"
+    },
+    "devDependencies": {
+        "fatina": "*",
+        "npm-run-all": "^4.1.5",
+        "typescript": "^4.9.5",
+        "vite": "^4.1.0"
+    }
 }

@@ -1,11 +1,8 @@
-export type FlattenObjectKeys<
-  T extends Record<string, unknown>,
-  Key = keyof T
-> = Key extends string
-  ? T[Key] extends Record<string, unknown>
-    ? `${Key}.${FlattenObjectKeys<T[Key]>}`
-    : `${Key}`
-  : never
+export type FlattenObjectKeys<T extends Record<string, unknown>, Key = keyof T> = Key extends string
+    ? T[Key] extends Record<string, unknown>
+        ? `${Key}.${FlattenObjectKeys<T[Key]>}`
+        : `${Key}`
+    : never
 
 export interface Tween {
     props: TweenProps[]
@@ -27,15 +24,16 @@ export type AnimationSettings = typeof animationDefaultSettings
 export type Easing = (t: number) => number
 
 export const animationDefaultSettings = {
-  easing: null as null | Easing
+    easing: null as null | Easing
 }
 
 export interface FieldWrapper<T> {
-  parse(val: T): number
-  serialize(value: number): T
-  zero(): number
-  mul(val1: number, val2: number): number
-  add(val1: number, val2: number): number
-  sub(val1: number, val2: number): number
-  value: T
+    init(value: T): void
+    parse(val: T): number
+    serialize(value: number): T
+    mul(val1: number, val2: number): number
+    add(val1: number, val2: number): number
+    sub(val1: number, val2: number): number
+    value: T
+    valueParsed: number
 }
