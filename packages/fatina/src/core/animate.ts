@@ -9,8 +9,10 @@ export function animate<T extends Record<string, unknown>>(obj: T | T[]) {
     const events = new Set<CallableFunction>()
     const { start, dispose } = useTicker((deltaTime) => {
         let loop = 50
-        while (deltaTime > 0 && loop > 0) {
+        let finish = false
+        while (!finish && loop > 0) {
             loop--
+            finish = deltaTime <= 0
             if (!current) {
                 if (queue.length === 0) {
                     dispose()
@@ -51,30 +53,37 @@ export function animate<T extends Record<string, unknown>>(obj: T | T[]) {
                 }
 
                 current.elapsed = after
+                // console.log(' --> Progress', current.props, current.elapsed, '/', current.duration, deltaTime, 'ms')
                 deltaTime -= usedDeltaTime
             }
 
             // finish
             if (current.elapsed >= current.duration) {
+                // console.log(' --> Finish', current.props, current.elapsed, '/', current.duration, deltaTime, 'ms')
+                finish = false
                 if (current.handler) events.add(current.handler)
                 current = undefined
             }
 
             // call events
             if (events.size > 0) {
-                events.forEach((x) => x())
+                events.forEach((x) => x(deltaTime))
                 events.clear()
             }
         }
     })
 
     const animate = {
+        isFinished() {
+            return queue.length === 0 && !current
+        },
         on(handler: CallableFunction) {
             queue.push({ props: [], duration: 0, elapsed: 0, handler, settings: null })
             return animate
         },
         delay(duration: number) {
             queue.push({ props: [], duration, elapsed: 0, settings: null })
+            start()
             return animate
         },
         async(): Promise<void> {

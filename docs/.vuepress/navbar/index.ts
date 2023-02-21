@@ -9,20 +9,37 @@ export default navbar([
     prefix: "/guides/",
     children: [
       {
-        text: "Animate",
+        text: "Basic",
         icon: "creative",
-        link: "animate/"
+        children: [
+            {
+                text: "Animate",
+                icon: "creative",
+                link: "animate/",
+            },
+            {
+                text: "AnimateFlow",
+                icon: "creative",
+                link: "animateFlow/",
+            }
+        ]
       },
       {
-        text: "AnimateCSS",
+        text: "HTML / CSS",
         icon: "creative",
-        link: "animateCSS/"
-      },
-      {
-        text: "AnimateTypo",
-        icon: "config",
-        link: "animateTypo/"
-      },
+        children: [
+            {
+                text: "AnimateCSS",
+                icon: "creative",
+                link: "animateCSS/"
+            },
+            {
+                text: "AnimateTypo",
+                icon: "config",
+                link: "animateTypo/"
+            }
+        ]
+      }
     ],
   },
   // {
