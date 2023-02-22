@@ -1,13 +1,26 @@
 import { easingLinear } from './easing'
-import { useTicker } from './fatina'
-import { animationDefaultSettings, AnimationSettings, FlattenObjectKeys, PropsValue, Tween, TweenProps } from './types'
+import { useFatina } from './fatina'
+import { animateDefaultSettings, AnimateSettings, animationDefaultSettings, AnimationSettings, FlattenObjectKeys, PropsValue, Tween, TweenProps } from './types'
 
-export function animate<T extends Record<string, unknown>>(obj: T | T[]) {
+export function animate<T extends Record<string, unknown>>(obj: T | T[], opt?: Partial<AnimateSettings>) {
+    const options = { ...animateDefaultSettings, ...opt }
+
     const queue: Tween[] = []
     let current: Tween | undefined
 
+    const ticker = options.ticker ?? useFatina().defaultTicker
+
     const events = new Set<CallableFunction>()
-    const { start, dispose } = useTicker((deltaTime) => {
+
+    function start() {
+        ticker.addListener(update)
+    }
+
+    function stop() {
+        ticker.disposeListener(update)
+    }
+
+    const update = (deltaTime: number) => {
         let loop = 50
         let finish = false
         while (!finish && loop > 0) {
@@ -15,7 +28,7 @@ export function animate<T extends Record<string, unknown>>(obj: T | T[]) {
             finish = deltaTime <= 0
             if (!current) {
                 if (queue.length === 0) {
-                    dispose()
+                    stop()
                     break
                 }
                 current = queue.shift()
@@ -53,25 +66,27 @@ export function animate<T extends Record<string, unknown>>(obj: T | T[]) {
                 }
 
                 current.elapsed = after
-                // console.log(' --> Progress', current.props, current.elapsed, '/', current.duration, deltaTime, 'ms')
+                console.log(' --> Progress', current.props, current.elapsed, '/', current.duration, deltaTime, 'ms')
                 deltaTime -= usedDeltaTime
             }
 
             // finish
             if (current.elapsed >= current.duration) {
-                // console.log(' --> Finish', current.props, current.elapsed, '/', current.duration, deltaTime, 'ms')
+                console.log(' --> Finish', current.props, current.elapsed, '/', current.duration, deltaTime, 'ms')
                 finish = false
                 if (current.handler) events.add(current.handler)
                 current = undefined
             }
 
             // call events
+            console.log('call events')
             if (events.size > 0) {
                 events.forEach((x) => x(deltaTime))
                 events.clear()
             }
+            console.log('call events end')
         }
-    })
+    }
 
     const animate = {
         isFinished() {
@@ -88,7 +103,17 @@ export function animate<T extends Record<string, unknown>>(obj: T | T[]) {
         },
         async(): Promise<void> {
             return new Promise((resolve) => {
-                queue.push({ props: [], duration: 0, elapsed: 0, handler: () => resolve(), settings: null })
+                queue.push({
+                    props: [],
+                    duration: 0,
+                    elapsed: 0,
+                    handler: () => {
+                        console.log('resolve')
+                        resolve()
+                        console.log('resolve ended', queue)
+                    },
+                    settings: null
+                })
             })
         },
         to(props: Partial<Record<FlattenObjectKeys<T>, PropsValue>>, duration = 500, options?: Partial<AnimationSettings>) {
@@ -117,6 +142,7 @@ export function animate<T extends Record<string, unknown>>(obj: T | T[]) {
             // queue tween
             queue.push({ props: tweens, duration, elapsed: 0, settings })
             start()
+            console.log('Added to queue')
 
             return animate
         }

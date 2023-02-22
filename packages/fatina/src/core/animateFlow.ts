@@ -1,37 +1,37 @@
 import { animate } from './animate'
-import { useTicker } from './fatina'
+import { useFatina } from './fatina'
 import { AnimationSettings, FlattenObjectKeys, PropsValue } from './types'
 
-export type AnimGenerator = Generator<unknown, void, unknown>
-
-function* waitFor(anim: { isFinished: () => boolean }) {
-    while (!anim.isFinished()) {
-        yield
-    }
-}
-
 export function animateFlow() {
-    const queue = new Set<AnimGenerator>()
-    const update = (dt: number) => {
-        for (const gen of queue) {
-            const res = gen.next()
-            if (res.done) queue.delete(gen)
-            if (res.done && queue.size === 0) {
-                dispose()
-            }
-        }
-    }
-    const { start, dispose } = useTicker(update)
+    const { ticker } = useFatina().defaultTicker.createSubTicker()
 
     return {
+        play(fn: () => Promise<void>) {
+            return fn()
+        },
+        async chain(anims: Promise<unknown>[]) {
+            for (const anim of anims) {
+                await anim
+            }
+        },
+        waitFrame() {
+            return new Promise((resolve) => {
+                const handler = () => {
+                    ticker.disposeListener(handler)
+                    resolve(true)
+                }
+                ticker.addListener(handler)
+            })
+        },
+        waitAll(anims: Promise<unknown>[]) {
+            return Promise.all(anims)
+        },
+        waitAny(anims: Promise<unknown>[]) {
+            return Promise.any(anims)
+        },
         delay(duration: number) {
-            const anim = animate({})
-            anim.delay(duration)
-            anim.on(update)
-
-            const generator = waitFor(anim)
-            generator.next()
-            return generator
+            console.log('delay')
+            return animate({}, { ticker }).delay(duration).async()
         },
         to<T extends Record<string, unknown>>(
             obj: T | T[],
@@ -39,20 +39,8 @@ export function animateFlow() {
             duration: number,
             options?: Partial<AnimationSettings>
         ) {
-            const anim = animate(obj)
-            anim.to(props, duration, options)
-            anim.on(update)
-
-            const generator = waitFor(anim)
-            generator.next()
-            return generator
-        },
-        play(generator: () => AnimGenerator) {
-            const gen = generator()
-            if (!gen.next().done) {
-                queue.add(gen)
-                start()
-            }
+            console.log('to')
+            return animate(obj, { ticker }).to(props, duration, options).async()
         }
     }
 }

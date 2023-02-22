@@ -110,7 +110,7 @@ describe('core > animate', () => {
         update(250)
     })
 
-    it.only('should be able to test events', () => {
+    it('should be able to test completed events', () => {
         const { update } = useFatina()
         const obj = { a: 0, b: 2, title: 'name' }
 

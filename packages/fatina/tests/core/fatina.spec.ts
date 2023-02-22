@@ -1,41 +1,46 @@
 import { useFatina, useFatinaAuto } from '../../src'
-import { it, describe, expect } from 'vitest'
+import { it, describe, expect, beforeEach } from 'vitest'
+
+beforeEach(() => {
+    const { defaultTicker } = useFatina()
+    defaultTicker.reset()
+})
 
 describe('core > fatina', () => {
     it('should be able to manually tick', () => {
-        const { update, elapsed } = useFatina()
+        const { update, defaultTicker } = useFatina()
 
-        expect(elapsed()).toBe(0)
+        expect(defaultTicker.elapsed()).toBe(0)
         update(100)
-        expect(elapsed()).toBe(100)
+        expect(defaultTicker.elapsed()).toBe(100)
     })
 
     it('should be able to automatically tick', async () => {
-        const { elapsed } = useFatinaAuto()
+        const { defaultTicker } = useFatinaAuto()
 
-        expect(elapsed()).toBe(0)
+        expect(defaultTicker.elapsed()).toBe(0)
         await new Promise<void>((resolve) => setTimeout(resolve, 1000))
-        expect(elapsed()).toBeGreaterThan(900)
-        expect(elapsed()).toBeLessThan(1100)
+        expect(defaultTicker.elapsed()).toBeGreaterThan(900)
+        expect(defaultTicker.elapsed()).toBeLessThan(1100)
     })
 
     it('can call multiple useFatinaAuto, they share the same instance', async () => {
-        const { elapsed } = useFatinaAuto()
-        const { elapsed: elapsed2 } = useFatinaAuto()
+        const { defaultTicker } = useFatinaAuto()
+        const { defaultTicker: ticker2 } = useFatinaAuto()
 
         await new Promise<void>((resolve) => setTimeout(resolve, 250))
-        expect(elapsed()).toEqual(elapsed2())
+        expect(defaultTicker).toEqual(ticker2)
     })
 
     it('can dispose', async () => {
-        const { elapsed, dispose } = useFatinaAuto()
+        const { defaultTicker, dispose } = useFatinaAuto()
 
         await new Promise<void>((resolve) => setTimeout(resolve, 250))
-        const elapsed1 = elapsed()
+        const elapsed1 = defaultTicker.elapsed()
         expect(elapsed1).toBeGreaterThan(0)
         dispose()
 
         await new Promise<void>((resolve) => setTimeout(resolve, 250))
-        expect(elapsed()).toBe(elapsed1)
+        expect(defaultTicker.elapsed()).toBe(elapsed1)
     })
 })

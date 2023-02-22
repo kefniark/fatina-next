@@ -1,3 +1,12 @@
+export interface FatinaType {
+    defaultTicker: Ticker
+    update(dt: number): void
+}
+
+export interface FatinaAuto extends FatinaType {
+    dispose(): void
+}
+
 export type FlattenObjectKeys<T extends Record<string, unknown>, Key = keyof T> = Key extends string
     ? T[Key] extends Record<string, unknown>
         ? `${Key}.${FlattenObjectKeys<T[Key]>}`
@@ -12,6 +21,19 @@ export interface Tween {
     settings: AnimationSettings | null
 }
 
+export interface Ticker {
+    elapsed(): number
+    scale(): {
+        get: () => number
+        set: (value: number) => void
+    }
+    createSubTicker(): { ticker: Ticker; dispose: CallableFunction }
+    update(dt: number): void
+    addListener(handler: (dt: number) => void): void
+    disposeListener(handler: (dt: number) => void): void
+    reset(): void
+}
+
 export interface TweenProps {
     parent: Record<string, number>
     property: string
@@ -21,7 +43,12 @@ export interface TweenProps {
 
 export type PropsValue = number | FieldWrapper<unknown>
 export type AnimationSettings = typeof animationDefaultSettings
+export type AnimateSettings = typeof animateDefaultSettings
 export type Easing = (t: number) => number
+
+export const animateDefaultSettings = {
+    ticker: null as null | Ticker
+}
 
 export const animationDefaultSettings = {
     easing: null as null | Easing

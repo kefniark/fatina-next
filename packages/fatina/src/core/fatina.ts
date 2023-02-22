@@ -1,13 +1,5 @@
-const ticks = new Set<(dt: number) => void>()
-const ticks_add = new Set<(dt: number) => void>()
-const ticks_remove = new Set<(dt: number) => void>()
-
-// few typings
-type FatinaType = ReturnType<typeof useFatina>
-
-interface FatinaAuto extends FatinaType {
-    dispose(): void
-}
+import { createTicker } from './ticker'
+import { FatinaAuto, FatinaType } from './types'
 
 // fatina auto
 let currentFatinaAuto: FatinaAuto | undefined
@@ -69,38 +61,14 @@ function useFatinaRaf() {
     return res
 }
 
-export function useFatina() {
-    let elapsed = 0
+const defaultTicker = createTicker()
+
+export function useFatina(): FatinaType {
     return {
-        elapsed() {
-            return elapsed
-        },
+        defaultTicker,
         update(dt: number) {
-            elapsed += dt
-
-            if (ticks_remove.size > 0) {
-                ticks_remove.forEach((x) => ticks.delete(x))
-                ticks_remove.clear()
-            }
-
-            if (ticks_add.size > 0) {
-                ticks_add.forEach((x) => ticks.add(x))
-                ticks_add.clear()
-            }
-
-            ticks.forEach((x) => x(dt))
-        }
-    }
-}
-
-export function useTicker(handler: (dt: number) => void) {
-    return {
-        start() {
-            if (ticks.has(handler) || ticks_add.has(handler)) return
-            ticks_add.add(handler)
-        },
-        dispose() {
-            ticks_remove.delete(handler)
+            console.log('Update', dt)
+            defaultTicker.update(dt)
         }
     }
 }
