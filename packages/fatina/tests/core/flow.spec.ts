@@ -1,7 +1,6 @@
-import { useFatina, animateFlow } from '../../src'
+import { useFatina, animateFlow, animate } from '../../src'
 import { it, describe, expect } from 'vitest'
 
-const wait = () => new Promise((resolve) => resolve(true))
 describe('core > flow', () => {
     it('should be able to play generator', async () => {
         const { update } = useFatina()
@@ -10,48 +9,33 @@ describe('core > flow', () => {
         const obj = { x: 0, y: 0, opacity: 0 }
 
         play(async () => {
-            console.log('1')
             await delay(100)
-            console.log('2')
             await to(obj, { x: 2 }, 100)
-            console.log('3')
         })
 
-        console.log('update 1')
-        update(25)
-        await wait()
-
-        console.log('update 2')
-        update(75)
-        await wait()
-
-        console.log('update 3')
-        update(100)
-        await wait()
-
-        console.log('update 4')
+        await update(25)
+        await update(75)
+        await update(100)
         expect(obj.x).toBe(2)
-
-        console.log('update 5')
     })
 
     it('should be able to play generator with big tick', async () => {
         const { update } = useFatina()
-        const { play, delay, to } = animateFlow()
+        const { play, delay, to, waitAll } = animateFlow()
 
         const obj = { x: 0, y: 0, opacity: 0 }
 
         play(async () => {
             await delay(100)
-            await to(obj, { x: 2 }, 100)
+            await waitAll([to(obj, { x: 2 }, 100), to(obj, { y: 2 }, 200)])
         })
 
-        update(200)
-        await wait()
+        await update(200)
         expect(obj.x).toBe(2)
+        expect(obj.y).toBe(1)
     })
 
-    it.only('should be able to play parallel', async () => {
+    it('should be able to play parallel', async () => {
         const { update } = useFatina()
         const { play, waitAll, to } = animateFlow()
 
@@ -74,8 +58,7 @@ describe('core > flow', () => {
             })
         ])
 
-        update(500)
-        await wait()
+        await update(500)
 
         expect(obj1.x).toBe(20)
         expect(obj2.x).toBe(10)
@@ -83,26 +66,62 @@ describe('core > flow', () => {
         expect(obj2.opacity).toBe(1)
     })
 
-    it('should be able to composite multiple animation', () => {
+    it('should be able to composite multiple animation', async () => {
         const { update } = useFatina()
         const { play, to } = animateFlow()
         const obj = { x: 0, y: 0, opacity: 0 }
 
-        const opacity = async function (val: number) {
-            await to(obj, { opacity: val }, 250)
-        }
+        const opacity = (el: { opacity: number }, val: number) => to(el, { opacity: val }, 250)
 
         play(async () => {
-            for (let i = 0; i < 5; i++) {
-                await opacity(1)
-                await to(obj, { x: 2 }, 500)
-                await opacity(0)
-            }
+            await opacity(obj, 1)
+            await to(obj, { x: 2 }, 500)
+            await opacity(obj, 0)
         })
 
-        for (let i = 0; i < 50; i++) {
-            update(100)
+        for (let i = 0; i < 20; i++) {
+            await update(50)
         }
         expect(obj.x).toBe(2)
+        expect(obj.opacity).toBe(0)
+    })
+
+    it('should be able to mix with normal animate', async () => {
+        const { update } = useFatina()
+        const { ticker, play, to } = animateFlow()
+        const obj = { x: 0, y: 0, opacity: 0 }
+
+        const anim = animate(obj)
+
+        play(async () => {
+            await anim.to({ x: 1 }, 250).to({ x: 2 }, 250).async(ticker)
+            await to(obj, { y: 2 }, 500)
+        })
+
+        await update(1000)
+        expect(obj.x).toBe(2)
+        expect(obj.y).toBe(2)
+    })
+
+    it('should be able to mix different animateFlow', async () => {
+        const { update } = useFatina()
+        const { play, to } = animateFlow()
+        const { to: to2 } = animateFlow()
+
+        const obj = { x: 0, y: 0, opacity: 0 }
+
+        play(async () => {
+            await to2(obj, { x: 1 }, 250)
+            await to2(obj, { x: 2 }, 250)
+            await to(obj, { y: 2 }, 500)
+        })
+
+        await update(250)
+        await update(250)
+        await update(250)
+        await update(250)
+
+        expect(obj.x).toBe(2)
+        expect(obj.y).toBe(2)
     })
 })

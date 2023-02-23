@@ -2,7 +2,9 @@
 
 Fatina can also help you to animate DOM elements.
 
-For that we have `animateCSS` where you can directly pass elements (`div`, `input`, `img`, ...), give some CSS rules to animate and we take care of the rest
+For that we have `animateCSS` where you can directly pass elements (`div`, `input`, `img`, ...), give some CSS rules to animate and we take care of the rest.
+
+It also allow you to animate elements based on CSS selector (`.className`, `#myObj`, ...). This give lot of flexibility and separation, because you can animate elements without keeping reference to them.
 
 -   Best defaults
 -   Unit conversions (`#FFFFFF`, `px`, `%`, `rem`, ...)
@@ -17,7 +19,7 @@ For that we have `animateCSS` where you can directly pass elements (`div`, `inpu
 ```ts
 import { animateCSS } from 'fatina'
 
-animateCSS(div)
+animateCSS('.container') // Use htmlElement or css selector
     .delay(1000)
     .to({ backgroundColor: '#000000', color: '#FFFFFF' }, 500)
     .to({ fontSize: '24px' }, 1000)
@@ -37,8 +39,8 @@ animateCSS(div)
 ```ts
 import { animateCSS } from 'fatina'
 
-export function anim(div: HTMLElement) {
-    animateCSS(div)
+export function anim(selector: string) {
+    return animateCSS(selector)
         .delay(1000)
         .to({ backgroundColor: '#000000', color: '#FFFFFF' }, 500)
         .to({ fontSize: '24px' }, 1000)
@@ -47,7 +49,20 @@ export function anim(div: HTMLElement) {
         .to({ scale: 0.5 }, 500)
         .to({ rotate: '360deg' }, 500)
         .to({ translate: '20px' }, 500)
-        .on(() => console.log('Animation Completed!'))
+        .delay(2000)
+        .to(
+            {
+                backgroundColor: '#FFFFFF',
+                color: '#000000',
+                width: '120px',
+                translate: '0px',
+                scale: 1,
+                rotate: '0deg',
+                fontSize: '12px'
+            },
+            200
+        )
+        .async()
 }
 ```
 
@@ -62,12 +77,18 @@ import { anim } from './Anim.ts'
 // initialize update loop
 useFatinaAuto()
 
-const container = ref()
-onMounted(() => anim(container.value))
+onMounted(async () => {
+    while (true) {
+        await anim('.container')
+    }
+})
 </script>
 
 <template>
-    <div ref="container" class="container">Some HTML Contents</div>
+    <div>
+        <div class="container">Some HTML Contents 1</div>
+        <div class="container">Some HTML Contents 2</div>
+    </div>
 </template>
 
 <style>
@@ -107,5 +128,3 @@ onMounted(() => anim(container.value))
 :::
 
 ## API
-
-Soon

@@ -13,17 +13,13 @@ export type FlattenObjectKeys<T extends Record<string, unknown>, Key = keyof T> 
         : `${Key}`
     : never
 
-export interface Tween {
-    props: TweenProps[]
-    elapsed: number
-    duration: number
-    handler?: CallableFunction
-    settings: AnimationSettings | null
-}
-
 export interface Ticker {
     elapsed(): number
-    scale(): {
+    remains: {
+        get: () => number
+        set: (value: number) => void
+    }
+    scale: {
         get: () => number
         set: (value: number) => void
     }
@@ -34,10 +30,25 @@ export interface Ticker {
     reset(): void
 }
 
+export enum TweenStatus {
+    Idle = 0,
+    Running = 1,
+    Finished = 2
+}
+export interface Tween {
+    props: TweenProps[]
+    elapsed: number
+    duration: number
+    handler?: CallableFunction
+    settings: AnimationSettings | null
+    status: TweenStatus
+}
+
 export interface TweenProps {
     parent: Record<string, number>
     property: string
     target: PropsValue
+    roundTo: number
     diff: number
 }
 
@@ -51,13 +62,15 @@ export const animateDefaultSettings = {
 }
 
 export const animationDefaultSettings = {
-    easing: null as null | Easing
+    easing: null as null | Easing,
+    elapsed: 0,
+    roundDecimals: -1
 }
 
 export interface FieldWrapper<T> {
     init(value: T): void
     parse(val: T): number
-    serialize(value: number): T
+    serialize(value: number, roundTo: number): T
     mul(val1: number, val2: number): number
     add(val1: number, val2: number): number
     sub(val1: number, val2: number): number

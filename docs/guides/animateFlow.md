@@ -1,11 +1,11 @@
 # AnimateFlow
 
-Normal tweens are powerful, but writing advanced animations can quickly become complex. (Verbose with lot of callbacks, sequence, parallel animation, ...)
+Normal Tweens are powerful, but writing advanced animations can quickly become complex. (Verbose with lot of callbacks, sequence, parallel animation, ...)
 
 To solve this issue, we provide `animateFlow`, to leverage the power of code and async.
 
 -   no more callback or chaining, use `await`
--   write reusable animation as functions
+-   write clean and reusable animation with async functions
 -   use native loops and conditionals
 -   more control on the execution order (parallel or sequential)
 
@@ -20,22 +20,20 @@ import { animateFlow } from 'fatina'
 
 const { play, delay, to } = animateFlow()
 
-// create reusable animation
-
+// create reusable animation (async functions)
+const fade = (el, opacity) => to(el, { opacity }, 1000)
 async function move(el, pos) {
     await to(el, { ...pos }, 2500)
 }
 
-function fade(el, opacity) {
-    return to(el, { opacity }, 1000)
-}
-
+// composite and play those animations (loop, if)
 play(async () => {
     while (true) {
-        fade(obj.value, 1)
-        await move(obj.value, { x: 100 })
-        fade(obj.value, 0)
-        await move(obj.value, { x: 0 })
+        fade(obj, 1)
+        await move(obj, { x: 100 })
+        await delay(1000)
+        fade(obj, 0) // not blocking, will happen in parallel of the following line
+        await move(obj, { x: 0 })
     }
 })
 ```
@@ -48,9 +46,9 @@ play(async () => {
 
 ```vue
 <template>
-    <div>
+    <blockquote>
         {{ JSON.stringify(obj, null, 2) }}
-    </div>
+    </blockquote>
 </template>
 
 <script setup>
@@ -64,18 +62,17 @@ const obj = ref({ x: 0, y: 0, opacity: 0 })
 const { play, delay, to } = animateFlow()
 
 onMounted(() => {
+    const fade = (el, opacity) => to(el, { opacity }, 1000, { roundDecimals: 2 })
     async function move(el, pos) {
-        await to(el, { ...pos }, 2500)
+        await to(el, { ...pos }, 2500, { roundDecimals: 2 })
     }
 
-    function fade(el, opacity) {
-        return to(el, { opacity }, 1000)
-    }
-
+    // composite and play those animations (loop, if)
     play(async () => {
         while (true) {
             fade(obj.value, 1)
             await move(obj.value, { x: 100 })
+            await delay(Math.random() * 2000)
             fade(obj.value, 0)
             await move(obj.value, { x: 0 })
         }

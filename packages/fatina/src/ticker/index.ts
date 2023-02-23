@@ -1,4 +1,4 @@
-import { Ticker } from './types'
+import { Ticker } from '../types'
 
 export function createTicker(): Ticker {
     const tickers = new Set<ReturnType<typeof createTicker>>()
@@ -8,6 +8,7 @@ export function createTicker(): Ticker {
 
     let elapsed = 0
     let scale = 1
+    let remains = 0
 
     const flush = () => {
         if (ticks_remove.size > 0) {
@@ -25,12 +26,18 @@ export function createTicker(): Ticker {
         elapsed() {
             return elapsed
         },
-        scale: () => ({
+        remains: {
+            get: () => remains,
+            set: (val: number) => {
+                remains = val
+            }
+        },
+        scale: {
             get: () => scale,
             set: (val: number) => {
                 scale = val
             }
-        }),
+        },
         createSubTicker() {
             const ticker = createTicker()
             tickers.add(ticker)

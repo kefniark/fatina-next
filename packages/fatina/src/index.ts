@@ -1,3 +1,7 @@
 export * from './core'
 export * from './css'
+export * from './easing'
+export * from './flow'
+export * from './types'
 export * from './typography'
+export * from './utils'

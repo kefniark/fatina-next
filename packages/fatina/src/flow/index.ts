@@ -1,11 +1,12 @@
-import { animate } from './animate'
-import { useFatina } from './fatina'
-import { AnimationSettings, FlattenObjectKeys, PropsValue } from './types'
+import { animate } from '../core/animate'
+import { useFatina } from '../core/fatina'
+import { AnimationSettings, FlattenObjectKeys, PropsValue } from '../types'
 
 export function animateFlow() {
     const { ticker } = useFatina().defaultTicker.createSubTicker()
 
     return {
+        ticker,
         play(fn: () => Promise<void>) {
             return fn()
         },
@@ -30,7 +31,6 @@ export function animateFlow() {
             return Promise.any(anims)
         },
         delay(duration: number) {
-            console.log('delay')
             return animate({}, { ticker }).delay(duration).async()
         },
         to<T extends Record<string, unknown>>(
@@ -39,8 +39,9 @@ export function animateFlow() {
             duration: number,
             options?: Partial<AnimationSettings>
         ) {
-            console.log('to')
-            return animate(obj, { ticker }).to(props, duration, options).async()
+            return animate(obj, { ticker })
+                .to(props, duration, { ...options, elapsed: ticker.remains.get() })
+                .async()
         }
     }
 }

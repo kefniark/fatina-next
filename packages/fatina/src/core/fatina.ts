@@ -1,5 +1,5 @@
-import { createTicker } from './ticker'
-import { FatinaAuto, FatinaType } from './types'
+import { createTicker } from '../ticker'
+import { FatinaAuto, FatinaType } from '../types'
 
 // fatina auto
 let currentFatinaAuto: FatinaAuto | undefined
@@ -63,12 +63,13 @@ function useFatinaRaf() {
 
 const defaultTicker = createTicker()
 
+const wait = () => new Promise((resolve) => resolve(true))
 export function useFatina(): FatinaType {
     return {
         defaultTicker,
-        update(dt: number) {
-            console.log('Update', dt)
+        async update(dt: number) {
             defaultTicker.update(dt)
+            await wait()
         }
     }
 }

@@ -1,4 +1,6 @@
-import { animate, easingLinear, FieldWrapper } from '../core'
+import { easingLinear } from '@src/easing'
+import { FieldWrapper } from '@src/types'
+import { animate } from '../core'
 
 const FieldTyping = (value: string) =>
     ({

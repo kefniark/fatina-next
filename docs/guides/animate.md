@@ -33,9 +33,9 @@ animate(obj)
 
 ```vue
 <template>
-    <div>
+    <blockquote>
         {{ JSON.stringify(obj, null, 2) }}
-    </div>
+    </blockquote>
 </template>
 
 <script setup>
@@ -44,14 +44,19 @@ import { useFatinaAuto, animate } from 'fatina'
 
 // initialize update loop
 useFatinaAuto()
-const obj = ref({ a: 2, b: 'name', c: 3 })
+const obj = ref({ x: 2, b: 'name', opacity: 1 })
 
-onMounted(() => {
-    animate(obj.value)
-        .to({ a: 20 }, 4000)
-        .delay(2000)
-        .to({ c: 0 }, 2000)
-        .on(() => console.log('Animation Completed!'))
+onMounted(async () => {
+    while (true) {
+        await animate(obj.value)
+            .to({ x: 100 }, 4000, { roundDecimals: 2 })
+            .delay(1000)
+            .to({ opacity: 0 }, 2000, { roundDecimals: 2 })
+            .delay(1000)
+            .to({ x: 2, opacity: 1 }, 0)
+            .delay(250)
+            .async()
+    }
 })
 </script>
 ```

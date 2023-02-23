@@ -125,4 +125,20 @@ describe('core > animate', () => {
         update(100)
         expect(completed).to.equal(2)
     })
+
+    it('should be able to round results', () => {
+        const { update } = useFatina()
+        const obj = { a: 0, b: 0, c: 0 }
+
+        animate(obj).to({ a: 1 }, 300, { roundDecimals: 0 })
+        animate(obj).to({ b: 1 }, 300, { roundDecimals: 3 })
+        animate(obj).to({ c: 1 }, 300, { roundDecimals: 5 })
+
+        update(200)
+
+        // only get 3 decimals, not 0.666666666...
+        expect(obj.a).to.equal(1)
+        expect(obj.b).to.equal(0.667)
+        expect(obj.c).to.equal(0.66667)
+    })
 })
