@@ -29,3 +29,10 @@ jobs:
 
       - name: Run Tests
         run: yarn test
+
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          base-path: packages/fatina
+          path-to-lcov: packages/fatina/coverage/lcov.info
+          github-token: ${{ secrets.GITHUB_TOKEN }}
