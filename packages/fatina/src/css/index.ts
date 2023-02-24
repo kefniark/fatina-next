@@ -1,17 +1,17 @@
-import { AnimationSettings } from '@src/types'
 import { isString } from '@src/utils'
+import { AnimationSettings } from '../types'
 import { animate } from '../core'
-import { FieldColor } from './color'
+import { FieldColorHSL, FieldColorRGB } from './color'
 import { FieldWithUnit, FieldWithoutUnit } from './fields'
 
 const units = ['px', '%', 'em', 'rem', 'vh', 'vw', 'vmin', 'vmax', 'deg', 'cm', 'mm', 'in', 'pt', 'pc', 'ch']
 
-function extractUnit(elements: HTMLElement[], prop: keyof CSSStyleDeclaration, val: string | number | undefined) {
+function extractUnit(elements: HTMLElement[], prop: keyof CSSStyleDeclaration, val: string | number | undefined, rgb: boolean, forceHex: boolean) {
     if (!val || typeof val === 'number') return FieldWithoutUnit(elements, prop, val as number)
     const unit = (val as string).replace(/[0-9]/g, '').trim().toLowerCase()
-    if (unit.startsWith('#')) return FieldColor(elements, prop, val)
+    if (unit.startsWith('#')) return rgb ? FieldColorRGB(elements, prop, val, forceHex) : FieldColorHSL(elements, prop, val, forceHex)
     if (units.includes(unit)) return FieldWithUnit(elements, prop, val, unit)
-    return null
+    return FieldWithoutUnit(elements, prop, parseInt(val))
 }
 
 function selectHtmlElements(obj: HTMLElement | HTMLElement[] | string): HTMLElement[] {
@@ -19,6 +19,11 @@ function selectHtmlElements(obj: HTMLElement | HTMLElement[] | string): HTMLElem
         return Array.isArray(obj) ? obj : [obj as HTMLElement]
     }
     return Array.from(document.querySelectorAll(obj))
+}
+
+export interface AnimationCSSSettings extends AnimationSettings {
+    rgb?: boolean
+    outputHex?: boolean
 }
 
 export function animateCSS<T extends HTMLElement | HTMLElement[] | string>(obj: T) {
@@ -36,12 +41,11 @@ export function animateCSS<T extends HTMLElement | HTMLElement[] | string>(obj: 
         },
         async: anim.async,
         kill: anim.kill,
-        to(props: Partial<CSSStyleDeclaration>, duration: number, options?: Partial<AnimationSettings>) {
+        to(props: Partial<CSSStyleDeclaration>, duration: number, options?: Partial<AnimationCSSSettings>) {
             const properties = Object.fromEntries(
                 Object.entries(props).map((x) => {
-                    const unit = extractUnit(items, x[0] as any, x[1] as string | number)
-                    if (unit) return [`style.${x[0]}`, unit]
-                    return [`style.${x[0]}`, x[1]] as [string, number]
+                    const unit = extractUnit(items, x[0] as any, x[1] as string | number, !!options?.rgb, !!options?.outputHex)
+                    return [`style.${x[0]}`, unit]
                 })
             )
             anim.to(properties, duration, options)

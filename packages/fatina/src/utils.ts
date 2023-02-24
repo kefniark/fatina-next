@@ -18,6 +18,16 @@ export function clamp(num: number, min = 0, max = 1) {
     return Math.min(Math.max(num, min), max)
 }
 
+/**
+ * Cap the angle difference between -180 and 180
+ *
+ * @param a
+ * @returns
+ */
+export function angle(a: number) {
+    return modulo(a + 180, 360) - 180
+}
+
 export function modulo(num: number, mod: number) {
     return ((num % mod) + mod) % mod
 }

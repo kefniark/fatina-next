@@ -35,6 +35,42 @@ describe('core > flow', () => {
         expect(obj.y).toBe(1)
     })
 
+    it('should be able to play and not wait', async () => {
+        const { update } = useFatina()
+        const { play, to, waitAny } = animateFlow()
+
+        const obj = { x: 0, y: 0, opacity: 0 }
+
+        play(async () => {
+            await waitAny([to(obj, { x: 2 }, 100), to(obj, { y: 2 }, 200)])
+            obj.opacity = 1
+        })
+
+        await update(100)
+        expect(obj.x).toBe(2)
+        expect(obj.opacity).toBe(1)
+        expect(obj.y).toBe(1)
+    })
+
+    it('should be able to play frame by frame', async () => {
+        const { update } = useFatina()
+        const { play, waitFrame } = animateFlow()
+
+        const obj = { x: 0, y: 0, opacity: 0 }
+
+        play(async () => {
+            await waitFrame()
+            obj.x += 1
+            await waitFrame()
+            obj.x += 1
+        })
+
+        await update(1)
+        expect(obj.x).toBe(1)
+        await update(1)
+        expect(obj.x).toBe(2)
+    })
+
     it('should be able to play parallel', async () => {
         const { update } = useFatina()
         const { play, waitAll, to } = animateFlow()
