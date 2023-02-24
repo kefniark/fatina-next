@@ -17,7 +17,8 @@ export interface Ticker {
     elapsed(): number
     remains: {
         get: () => number
-        set: (value: number) => void
+        pop: () => void
+        push: (dt: number) => void
     }
     scale: {
         get: () => number

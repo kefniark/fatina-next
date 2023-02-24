@@ -1,3 +1,4 @@
+import { wait } from '@src/utils'
 import { createTicker } from '../ticker'
 import { FatinaAuto, FatinaType } from '../types'
 
@@ -63,7 +64,6 @@ function useFatinaRaf() {
 
 const defaultTicker = createTicker()
 
-const wait = () => new Promise((resolve) => resolve(true))
 export function useFatina(): FatinaType {
     return {
         defaultTicker,

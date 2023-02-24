@@ -7,19 +7,18 @@ export function createTicker(): Ticker {
     const ticks_added = new Set<(dt: number) => void>()
     const ticks_remove = new Set<(dt: number) => void>()
 
+    const remains: number[] = []
     let elapsed = 0
     let scale = 1
-    let remains = 0
 
     return {
         elapsed() {
             return elapsed
         },
         remains: {
-            get: () => remains,
-            set: (val: number) => {
-                remains = val
-            }
+            get: () => (remains.length > 0 ? remains[0] : 0),
+            pop: () => remains.shift(),
+            push: (dt: number) => remains.push(dt)
         },
         scale: {
             get: () => scale,

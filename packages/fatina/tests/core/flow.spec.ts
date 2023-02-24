@@ -124,4 +124,36 @@ describe('core > flow', () => {
         expect(obj.x).toBe(2)
         expect(obj.y).toBe(2)
     })
+
+    it('should be able to keep remains consistenty', async () => {
+        const { update } = useFatina()
+        const { play, to } = animateFlow()
+        const obj = { x: 0, y: 0, z: 0 }
+
+        play(async () => {
+            await to(obj, { x: 1 }, 190)
+            expect(obj.x).toBe(1)
+            await to(obj, { x: 2 }, 1000 - 190)
+        })
+
+        play(async () => {
+            await to(obj, { y: 1 }, 160)
+            expect(obj.y).toBe(1)
+            await to(obj, { y: 2 }, 1000 - 160)
+        })
+
+        play(async () => {
+            await to(obj, { z: 1 }, 200)
+            expect(obj.z).toBe(1)
+            await to(obj, { z: 2 }, 1000 - 200)
+        })
+
+        await update(250)
+        await update(250)
+        await update(500)
+
+        expect(obj.x).toBe(2)
+        expect(obj.y).toBe(2)
+        expect(obj.z).toBe(2)
+    })
 })

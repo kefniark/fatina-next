@@ -176,9 +176,11 @@ export function animate<T extends Record<string, unknown>>(obj: T | T[], opt?: P
         },
         async(t?: Ticker): Promise<void> {
             return new Promise((resolve) => {
-                queue[queue.length - 1].handler = (dt: number) => {
-                    resolve()
-                    ;(t ? t : ticker).remains.set(dt)
+                queue[queue.length - 1].handler = async (dt: number) => {
+                    const tick = t ? t : ticker
+                    tick.remains.push(dt)
+                    await resolve()
+                    tick.remains.pop()
                 }
             })
         },

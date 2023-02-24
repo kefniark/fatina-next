@@ -6,6 +6,8 @@ export function camelToSnake(val: string) {
     return val.replace(/[A-Z]/g, (m) => '-' + m.toLowerCase())
 }
 
+export const wait = () => new Promise((resolve) => resolve(true))
+
 // const EPSILON = 0.000001
 export function roundTo(value: number, decimals = -1) {
     if (decimals < 0) return value
