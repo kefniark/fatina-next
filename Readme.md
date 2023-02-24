@@ -1,5 +1,8 @@
 ![Logo](logo.png)
 
+[![Coverage Status](https://coveralls.io/repos/github/kefniark/fatina-next/badge.svg?branch=develop)](https://coveralls.io/github/kefniark/fatina-next?branch=develop)
+[![Test](https://github.com/kefniark/fatina-next/actions/workflows/pull-request.yml/badge.svg)](https://github.com/kefniark/fatina-next/actions/workflows/pull-request.yml)
+
 # Fatina
 
 Lighweight Tweening Library for Games / Web
