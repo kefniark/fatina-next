@@ -56,17 +56,6 @@ animate(obj).to({ x: 200 }, 1000, {
 // sequence of 3s
 animate(obj).to({ x: 200 }, 1000).to({ x: 400 }, 1000).to({ x: 600 }, 1000)
 
-// parallel, with different strategies (like Promise.all, Promise.any)
-animate(obj)
-    .parallel((sub) => {
-        sub.to({ x: 0 }, 1000).to({ opacity: 0 }, 250)
-    })
-    .to({ x: 200, opacity: 1 }, 1000)
-
-// animation information
-const { stats } = animate(obj).to({ x: 2 }, 1000).to({ x: 4 }, 1000)
-const { progress, isRunning } = stats
-
 // simpler events
 animate(obj)
     .on(() => console.log('Started'))
@@ -85,30 +74,3 @@ Thanks to tree-shaking, no need to separate under different namespaces or packag
     -   Handle web usage (Text typing, counter animation, ...)
 -   For PIXI.js: `import { animatePixi } from "fatina"`
     -   Handle sprite
-
-with a similar signature
-
-```ts
-// automatically handle unit
-animateCSS(div).to(
-    {
-        backgroundColor: '#FF0000',
-        borderRadius: '5px'
-    },
-    1000
-)
-
-// allow for css selector usage
-animateCSS('.bunny').to(
-    {
-        color: '#FF0000',
-        fontSize: '24px'
-    },
-    1000
-)
-
-// provide new features
-animateCSS(div).typing({ value: 'this is a long text' }, 1000)
-
-animateTypo(div).append('Hello there').delay(500).append(', how are you today').delay(250).append('?')
-```
