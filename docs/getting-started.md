@@ -94,20 +94,21 @@ useFatinaAuto()
 
 const bg = ref()
 const img = ref()
-onMounted(() => {
+onMounted(async () => {
     // animate
-    animateCSS(img.value).to({ left: '300px' }, 1000)
-
     bg.value.style.background = '#FFFFFF'
-    animateCSS(bg.value)
-        .to({ background: '#FF0000' }, 2000)
-        .to({ background: '#FFFF00' }, 2000)
-        .to({ background: '#FFFFFF' }, 2000)
-        .to({ background: '#00FFFF' }, 2000)
-        .to({ background: '#0000FF' }, 2000)
-        .to({ background: '#FF00FF' }, 2000)
-        .to({ background: '#000000' }, 2000)
-        .to({ background: '#FFFFFF' }, 2000)
+    while (true) {
+        animateCSS(img.value).to({ left: '300px' }, 1000).to({ left: '0px' }, 1000)
+
+        await animateCSS(bg.value)
+            .to({ background: '#FF0000' }, 800)
+            .to({ background: '#FFFF00' }, 800)
+            .to({ background: '#FFFFFF' }, 800)
+            .to({ background: '#00FFFF' }, 800)
+            .to({ background: '#FFFFFF' }, 1)
+            .delay(500)
+            .async()
+    }
 })
 </script>
 

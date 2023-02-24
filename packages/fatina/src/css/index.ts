@@ -35,6 +35,7 @@ export function animateCSS<T extends HTMLElement | HTMLElement[] | string>(obj: 
             return t
         },
         async: anim.async,
+        kill: anim.kill,
         to(props: Partial<CSSStyleDeclaration>, duration: number, options?: Partial<AnimationSettings>) {
             const properties = Object.fromEntries(
                 Object.entries(props).map((x) => {

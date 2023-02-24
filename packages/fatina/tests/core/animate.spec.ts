@@ -6,7 +6,7 @@ describe('core > animate', () => {
         const { update } = useFatina()
 
         const obj = { a: 1, c: 3, b: 'name' }
-        animate(obj).to({ a: 2 }, 1000).to({ c: 0 }, 1000)
+        const { isFinished } = animate(obj).to({ a: 2 }, 1000).to({ c: 0 }, 1000)
 
         update(500)
         expect(obj.a).to.equal(1.5)
@@ -17,6 +17,7 @@ describe('core > animate', () => {
 
         update(1000)
         expect(obj.c).to.equal(0)
+        expect(isFinished()).to.equal(true)
     })
 
     it('should be able to tween multiple object', () => {
@@ -124,5 +125,18 @@ describe('core > animate', () => {
 
         update(100)
         expect(completed).to.equal(2)
+    })
+
+    it('should be able to kill a tween', () => {
+        const { update } = useFatina()
+        const obj = { a: 0, b: 2, title: 'name' }
+
+        const { kill } = animate(obj).to({ a: 1 }, 1000)
+
+        update(500)
+        kill()
+        expect(obj.a).to.equal(0.5)
+        update(500)
+        expect(obj.a).to.equal(0.5)
     })
 })

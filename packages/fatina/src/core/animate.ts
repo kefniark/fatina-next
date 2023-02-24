@@ -182,6 +182,11 @@ export function animate<T extends Record<string, unknown>>(obj: T | T[], opt?: P
                 }
             })
         },
+        kill() {
+            stop()
+            current = undefined
+            queue.length = 0
+        },
         to(props: Partial<Record<FlattenObjectKeys<T>, PropsValue>>, duration = 500, options?: Partial<AnimationSettings>) {
             const settings: AnimationSettings = options ? Object.assign({}, animationDefaultSettings, options) : animationDefaultSettings
             const tweens: TweenProps[] = []
