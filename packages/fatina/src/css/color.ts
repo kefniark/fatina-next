@@ -2,35 +2,37 @@ import { camelToSnake } from '@src/utils'
 
 type Color = [number, number, number]
 
-export const FieldColor = (elements: HTMLElement[], prop: keyof CSSStyleDeclaration, value: string) => ({
-    init() {
-        for (const el of elements) {
-            const style = getComputedStyle(el)
-            if (!el.style[prop]) {
-                ;(el.style as any)[prop] = style.getPropertyValue(camelToSnake(prop.toString()))
+export function FieldColor(elements: HTMLElement[], prop: keyof CSSStyleDeclaration, value: string) {
+    return {
+        init() {
+            for (const el of elements) {
+                const style = getComputedStyle(el)
+                if (!el.style[prop]) {
+                    el.style[prop as any] = style.getPropertyValue(camelToSnake(prop.toString()))
+                }
             }
-        }
-        this.valueParsed = this.parse(value) as unknown as number
-    },
-    parse(val: string): Color {
-        if (!val) return [0, 0, 0]
-        return fromHex(val)
-    },
-    serialize(val: Color) {
-        return toHex(val)
-    },
-    mul(val1: Color, val2: number) {
-        return [val1[0] * val2, val1[1] * val2, val1[2] * val2] as Color
-    },
-    add(val1: Color, val2: Color) {
-        return [val1[0] + val2[0], val1[1] + val2[1], val1[2] + val2[2]] as Color
-    },
-    sub(val1: Color, val2: Color) {
-        return [val1[0] - val2[0], val1[1] - val2[1], val1[2] - val2[2]] as Color
-    },
-    value,
-    valueParsed: 0
-})
+            this.valueParsed = this.parse(value) as unknown as number
+        },
+        parse(val: string): Color {
+            if (!val) return [0, 0, 0]
+            return fromHex(val)
+        },
+        serialize(start: Color, diff: Color | undefined): string {
+            return toHex(diff ? this.add(start, diff) : start)
+        },
+        mul(val1: Color, val2: number) {
+            return [val1[0] * val2, val1[1] * val2, val1[2] * val2] as Color
+        },
+        add(val1: Color, val2: Color) {
+            return [val1[0] + val2[0], val1[1] + val2[1], val1[2] + val2[2]] as Color
+        },
+        sub(val1: Color, val2: Color) {
+            return [val1[0] - val2[0], val1[1] - val2[1], val1[2] - val2[2]] as Color
+        },
+        value,
+        valueParsed: 0
+    }
+}
 
 function fromHex(hex: string) {
     if (hex.startsWith('rgb')) {

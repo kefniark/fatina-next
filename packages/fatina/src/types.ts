@@ -48,8 +48,16 @@ export interface TweenProps {
     parent: Record<string, number>
     property: string
     target: PropsValue
-    roundTo: number
+    settings: TweenPropsSettings
+    cancelled: boolean
     diff: number
+}
+
+export interface TweenPropsSettings {
+    relative: boolean
+    roundDecimals: number
+    snapStep: number
+    snapGrid: number
 }
 
 export type PropsValue = number | FieldWrapper<unknown>
@@ -63,14 +71,17 @@ export const animateDefaultSettings = {
 
 export const animationDefaultSettings = {
     easing: null as null | Easing,
+    relative: false,
     elapsed: 0,
-    roundDecimals: -1
+    roundDecimals: -1,
+    snapStep: 0,
+    snapGrid: 0
 }
 
 export interface FieldWrapper<T> {
     init(value: T): void
     parse(val: T): number
-    serialize(value: number, roundTo: number): T
+    serialize(start: number, diff: number | undefined, opts: TweenPropsSettings): T
     mul(val1: number, val2: number): number
     add(val1: number, val2: number): number
     sub(val1: number, val2: number): number

@@ -19,3 +19,8 @@ export function clamp(num: number, min = 0, max = 1) {
 export function modulo(num: number, mod: number) {
     return ((num % mod) + mod) % mod
 }
+
+export function snap(num: number, steps: number) {
+    if (steps <= 0) return num
+    return Math.round(num * steps) / steps
+}

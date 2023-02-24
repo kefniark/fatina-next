@@ -1,9 +1,10 @@
 import { easingLinear } from '@src/easing'
-import { FieldWrapper } from '@src/types'
+import { FieldWrapper, TweenPropsSettings } from '@src/types'
+import { snap } from '@src/utils'
 import { animate } from '../core'
 
-const FieldTyping = (value: string) =>
-    ({
+function FieldTyping(value: string) {
+    return {
         init(val: string) {
             this.value = val + this.value
             this.valueParsed = this.parse(this.value)
@@ -11,16 +12,16 @@ const FieldTyping = (value: string) =>
         parse(val: string): number {
             return val.length
         },
-        serialize(val: number) {
+        serialize(start: number, diff: number, settings: TweenPropsSettings) {
+            const val = snap(start + snap(diff, settings.snapStep), settings.snapGrid)
             return this.value.slice(0, Math.round(val))
         },
-        zero: () => 0,
         mul: (val1: number, val2: number) => val1 * val2,
-        add: (val1: number, val2: number) => val1 + val2,
         sub: (val1: number, val2: number) => val1 - val2,
         value,
         valueParsed: 0
-    } as FieldWrapper<string>)
+    } as FieldWrapper<string>
+}
 
 export const animationTypoDefaultSettings = {
     property: 'innerHTML' as 'innerHTML' | 'innerText' | 'value' | 'textContent',

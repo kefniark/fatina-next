@@ -1,5 +1,5 @@
-import { useFatina, animateFlow, animate } from '../../src'
 import { it, describe, expect } from 'vitest'
+import { useFatina, animateFlow, animate } from '../../src'
 
 describe('core > flow', () => {
     it('should be able to play generator', async () => {

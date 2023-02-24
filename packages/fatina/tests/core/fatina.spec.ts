@@ -1,5 +1,5 @@
-import { useFatina, useFatinaAuto } from '../../src'
 import { it, describe, expect, beforeEach } from 'vitest'
+import { useFatina, useFatinaAuto } from '../../src'
 
 beforeEach(() => {
     const { defaultTicker } = useFatina()

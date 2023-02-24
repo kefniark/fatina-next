@@ -1,5 +1,5 @@
-import { animateTypo, useFatina } from '../../src'
 import { it, describe, expect } from 'vitest'
+import { animateTypo, useFatina } from '../../src'
 
 describe('typing > basic', () => {
     it('should be able to update color', () => {
