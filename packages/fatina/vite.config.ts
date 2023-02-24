@@ -19,7 +19,7 @@ export default {
         environment: 'happy-dom',
         coverage: {
             reportsDirectory: './coverage',
-            reporter: ['text', 'html']
+            reporter: ['lcov', 'text', 'html']
         }
     },
     resolve: {
