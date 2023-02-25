@@ -41,6 +41,8 @@ function checkConflictTween(tween: TweenProps) {
 export function animate<T extends Record<string, unknown>>(obj: T | T[], opt?: Partial<AnimateSettings>) {
     const options = { ...animateDefaultSettings, ...opt }
 
+    type AnimateProps = Partial<Record<FlattenObjectKeys<T>, PropsValue>> | ((index: number, obj: T) => Partial<Record<FlattenObjectKeys<T>, PropsValue>>)
+
     const queue: Tween[] = []
     let current: Tween | undefined
 
@@ -167,6 +169,7 @@ export function animate<T extends Record<string, unknown>>(obj: T | T[], opt?: P
         },
         on(handler: CallableFunction) {
             queue.push({ props: [], duration: 0, elapsed: 0, handler, settings: null, status: 0 })
+            start()
             return animate
         },
         delay(duration: number) {
@@ -176,11 +179,17 @@ export function animate<T extends Record<string, unknown>>(obj: T | T[], opt?: P
         },
         async(t?: Ticker): Promise<void> {
             return new Promise((resolve) => {
-                queue[queue.length - 1].handler = async (dt: number) => {
+                const handler = async (dt: number) => {
                     const tick = t ? t : ticker
                     tick.remains.push(dt)
                     await resolve()
                     tick.remains.pop()
+                }
+
+                if (queue[queue.length - 1].handler) {
+                    this.on(handler)
+                } else {
+                    queue[queue.length - 1].handler = handler
                 }
             })
         },
@@ -189,7 +198,10 @@ export function animate<T extends Record<string, unknown>>(obj: T | T[], opt?: P
             current = undefined
             queue.length = 0
         },
-        to(props: Partial<Record<FlattenObjectKeys<T>, PropsValue>>, duration = 500, options?: Partial<AnimationSettings>) {
+        set(props: AnimateProps, options?: Partial<AnimationSettings>) {
+            return this.to(props, 0, options)
+        },
+        to(props: AnimateProps, duration = 500, options?: Partial<AnimationSettings>) {
             const settings: AnimationSettings = options ? Object.assign({}, animationDefaultSettings, options) : animationDefaultSettings
             const tweens: TweenProps[] = []
             const arr = Array.isArray(obj) ? obj : [obj]
@@ -197,10 +209,13 @@ export function animate<T extends Record<string, unknown>>(obj: T | T[], opt?: P
             // dont allow negative duration
             if (duration <= 0) duration = 0.000001
 
+            let i = 0
             for (const entry of arr) {
-                for (const key in props) {
+                const res = typeof props === 'function' ? props(i, entry) : props
+                i++
+                for (const key in res) {
                     const path = key.split('.')
-                    const target: number = (props as Record<string, number>)[key]
+                    const target: number = (res as Record<string, number>)[key]
                     let parent: any = entry
                     const property = path.pop()
                     if (!property) continue

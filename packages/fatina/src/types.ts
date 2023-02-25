@@ -15,6 +15,7 @@ export type FlattenObjectKeys<T extends Record<string, unknown>, Key = keyof T> 
 
 export interface Ticker {
     elapsed(): number
+    deltaTime(): number
     remains: {
         get: () => number
         pop: () => void

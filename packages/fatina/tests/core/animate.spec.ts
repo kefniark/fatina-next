@@ -127,6 +127,21 @@ describe('core > animate', () => {
         expect(completed).to.equal(2)
     })
 
+    it('should be able to test completed events', async () => {
+        const { update } = useFatina()
+        const obj = { a: 0, b: 2, title: 'name' }
+
+        let completed = 0
+        animate(obj)
+            .delay(1)
+            .on(() => completed++)
+            .async()
+            .then(() => completed++)
+
+        await update(100)
+        expect(completed).to.equal(2)
+    })
+
     it('should be able to kill a tween', () => {
         const { update } = useFatina()
         const obj = { a: 0, b: 2, title: 'name' }

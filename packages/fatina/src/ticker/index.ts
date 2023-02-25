@@ -10,10 +10,15 @@ export function createTicker(): Ticker {
     const remains: number[] = []
     let elapsed = 0
     let scale = 1
+    const dt = 0
 
     return {
         elapsed() {
             return elapsed
+        },
+        deltaTime() {
+            if (remains.length > 0) return remains[0]
+            return dt
         },
         remains: {
             get: () => (remains.length > 0 ? remains[0] : 0),
@@ -38,6 +43,7 @@ export function createTicker(): Ticker {
         },
         update(dt: number) {
             const delta = dt * scale
+            dt = delta
             elapsed += delta
 
             if (ticks_remove.size > 0) {
