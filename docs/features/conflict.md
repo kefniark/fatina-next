@@ -35,7 +35,9 @@ So the final value will be `x = 200 (0 + 100 + 100)` whatever timing the tween w
 
 ## Side effect
 
-The only side effect is potentially some visual consitency. Here is a example to illustrate it:
+The only side effect is potentially some visual inconsitency.
+
+Here is a example to illustrate it:
 
 ```ts
 useAnimate(obj)
@@ -57,7 +59,7 @@ title Timeline of the animation
 
 Few things we can see:
 
--   The last animation started takes priority over previously running ones
+-   The last animation started takes priority
 -   All callbacks and timing happened as expected, even for `Anim1` which was cancelled
 -   When `Anim3` started it only solved the conflict with `Anim3.x <> Anim1.x` on that specific property, it had no impact on other animations like `Anim2`
--   `x` value went through `0 => -200 => 500 => 200`, and all the transitions were smooth, no jump. But it never went through `x = -600`
+-   `x` went through `0 => -200 => 500 => 200`, and all the transitions were smooth, no jump. But it never went through `x = -600`
