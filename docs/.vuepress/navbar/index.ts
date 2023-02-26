@@ -4,7 +4,34 @@ export default navbar([
   "/",
   { text: "Getting Started", icon: "discover", link: "/getting-started/" },
   {
-    text: "Components",
+    text: "Features",
+    icon: "creative",
+    prefix: "/features/",
+    children: [
+      {
+        text: "Update Loop",
+        icon: "creative",
+        link: "update/",
+      },
+      {
+        text: "Easing",
+        icon: "creative",
+        link: "easing/",
+      },
+      {
+        text: "Conflict Solving",
+        icon: "creative",
+        link: "conflict/",
+      },
+      {
+        text: "Multiple Targets",
+        icon: "creative",
+        link: "array/",
+      }
+    ]
+},
+  {
+    text: "Guides",
     icon: "creative",
     prefix: "/guides/",
     children: [

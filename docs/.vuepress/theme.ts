@@ -24,7 +24,7 @@ export default hopeTheme({
       navbar: enNavbar,
 
       // sidebar
-      sidebar: undefined, 
+      sidebar: false,
 
       displayFooter: true,
 
@@ -58,7 +58,7 @@ export default hopeTheme({
       include: false,
       katex: false,
       mark: false,
-      mermaid: false,
+      mermaid: true,
       playground: {
         presets: ["ts", "vue"]
       },
