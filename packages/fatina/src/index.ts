@@ -1,5 +1,6 @@
 export * from './core'
 export * from './css'
+export * from './array'
 export * from './easing'
 export * from './flow'
 export * from './types'

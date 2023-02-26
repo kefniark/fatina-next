@@ -1,4 +1,4 @@
-import { isString } from '@src/utils'
+import { selectHtmlElements } from '@src/utils'
 import { AnimationSettings } from '../types'
 import { animate } from '../core'
 import { FieldColorHSL, FieldColorRGB } from './color'
@@ -12,13 +12,6 @@ function extractUnit(elements: HTMLElement[], prop: keyof CSSStyleDeclaration, v
     if (unit.startsWith('#')) return rgb ? FieldColorRGB(elements, prop, val, forceHex) : FieldColorHSL(elements, prop, val, forceHex)
     if (units.includes(unit)) return FieldWithUnit(elements, prop, val, unit)
     return FieldWithoutUnit(elements, prop, parseInt(val))
-}
-
-function selectHtmlElements(obj: HTMLElement | HTMLElement[] | string): HTMLElement[] {
-    if (!isString(obj)) {
-        return Array.isArray(obj) ? obj : [obj as HTMLElement]
-    }
-    return Array.from(document.querySelectorAll(obj))
 }
 
 export interface AnimationCSSSettings extends AnimationSettings {

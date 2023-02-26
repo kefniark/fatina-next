@@ -10,11 +10,6 @@ export function animateFlow() {
         play(fn: () => Promise<void>) {
             return fn()
         },
-        async chain(anims: Promise<unknown>[]) {
-            for (const anim of anims) {
-                await anim
-            }
-        },
         waitFrame() {
             return new Promise((resolve) => {
                 const handler = () => {

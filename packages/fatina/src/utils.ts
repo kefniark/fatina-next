@@ -6,6 +6,13 @@ export function camelToSnake(val: string) {
     return val.replace(/[A-Z]/g, (m) => '-' + m.toLowerCase())
 }
 
+export function selectHtmlElements(obj: HTMLElement | HTMLElement[] | string): HTMLElement[] {
+    if (!isString(obj)) {
+        return Array.isArray(obj) ? obj : [obj as HTMLElement]
+    }
+    return Array.from(document.querySelectorAll(obj))
+}
+
 export const wait = () => new Promise((resolve) => resolve(true))
 
 export function roundTo(value: number, decimals = -1) {

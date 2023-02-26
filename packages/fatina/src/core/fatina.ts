@@ -5,16 +5,31 @@ import { FatinaAuto, FatinaType } from '../types'
 // fatina auto
 let currentFatinaAuto: FatinaAuto | undefined
 
-export function useFatinaAuto() {
+const defaultFatinaOption = {
+    raf: true,
+    pauseVisibility: true,
+    fps: 60
+}
+type FatinaOption = typeof defaultFatinaOption
+
+export function disposeFatinaAuto() {
+    if (currentFatinaAuto) {
+        currentFatinaAuto.dispose()
+        currentFatinaAuto = undefined
+    }
+}
+
+export function useFatinaAuto(opt?: Partial<FatinaOption>) {
     if (currentFatinaAuto) return currentFatinaAuto
+    const settings = { ...defaultFatinaOption, ...opt }
 
     // if possible use requestAnimationFrame
     // @ts-ignore
-    if (globalThis.requestAnimationFrame) return useFatinaRaf()
+    if (settings.raf && globalThis.requestAnimationFrame) return useFatinaRaf()
 
     // fallback on setInterval
     const fatina = useFatina()
-    const fixedDelta = 1000 / 60
+    const fixedDelta = 1000 / settings.fps
     let last = performance.now()
     const handler = setInterval(() => {
         const now = performance.now()
@@ -31,10 +46,11 @@ export function useFatinaAuto() {
     return res
 }
 
-function useFatinaRaf() {
+function useFatinaRaf(opt?: Partial<FatinaOption>) {
+    const settings = { ...defaultFatinaOption, ...opt }
     const fatina = useFatina()
 
-    const frameRate = 1000 / 60
+    const frameRate = 1000 / settings.fps
     let lastFrame = 0
     let deltaTime = 0
     let startTime: number | undefined
@@ -43,7 +59,7 @@ function useFatinaRaf() {
     const handler = (time: number) => {
         if (startTime === undefined) {
             startTime = time
-        } else {
+        } else if (!settings.pauseVisibility || document.visibilityState === 'visible') {
             const currentFrame = Math.round((time - startTime) / frameRate)
             deltaTime = (currentFrame - lastFrame) * frameRate
             lastFrame = currentFrame
