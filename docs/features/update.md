@@ -2,7 +2,7 @@
 
 Any animation library need to be updated at a constant rate.
 
-For this **Fatina** provide two ways:
+For this **Fatina** provide two ways to do it:
 
 -   An automatic: For simple usage, one-liner you can forget about
 -   A manual: You have full control on the update loop
@@ -40,7 +40,7 @@ The automatic update has few properties:
 -   Use `visibility` API when possible to pause animations in background
 -   Can be initialized multiple time
 
-If you want to get rid of it, you can simple stop the update loop
+And when you want to get rid of it, you can simple stop the update loop
 
 ```ts
 const { dispose } = useFatinaAuto()

@@ -1,5 +1,5 @@
 import { roundTo, snap } from '@src/utils'
-import { easingLinear } from '../easing'
+import { easeLinear } from '../easing'
 import {
     animateDefaultSettings,
     AnimateSettings,
@@ -91,7 +91,7 @@ export function animate<T extends Record<string, unknown>>(obj: T | T[], opt?: P
         if (currentTween.elapsed <= currentTween.duration) {
             const usedDeltaTime = Math.min(deltaTime, currentTween.duration - currentTween.elapsed)
             const after = currentTween.elapsed + usedDeltaTime
-            const easing = currentTween.settings?.easing ?? easingLinear
+            const easing = currentTween.settings?.easing ?? easeLinear
 
             for (const tween of currentTween.props) {
                 if (tween.cancelled) continue

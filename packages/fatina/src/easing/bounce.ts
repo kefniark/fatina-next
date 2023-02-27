@@ -1,5 +1,5 @@
 // Bounce
-export function easingOutBounce(t: number): number {
+export function easeOutBounce(t: number): number {
     if (t < 1 / 2.75) {
         return 7.5625 * t * t
     } else if (t < 2 / 2.75) {
@@ -11,13 +11,13 @@ export function easingOutBounce(t: number): number {
     }
 }
 
-export function easingInBounce(t: number): number {
-    return 1 - easingOutBounce(1 - t)
+export function easeInBounce(t: number): number {
+    return 1 - easeOutBounce(1 - t)
 }
 
-export function easingInOutBounce(t: number): number {
+export function easeInOutBounce(t: number): number {
     if (t < 0.5) {
-        return easingInBounce(t * 2) * 0.5
+        return easeInBounce(t * 2) * 0.5
     }
-    return easingOutBounce(t * 2 - 1) * 0.5 + 0.5
+    return easeOutBounce(t * 2 - 1) * 0.5 + 0.5
 }

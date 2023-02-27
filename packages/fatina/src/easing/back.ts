@@ -1,7 +1,7 @@
 const BACK = 1.70158
 
 // Back
-export function easingInBack(t: number): number {
+export function easeInBack(t: number): number {
     const s = BACK
     if (t === 0) {
         return 0
@@ -9,12 +9,12 @@ export function easingInBack(t: number): number {
     return t === 1 ? 1 : t * t * ((s + 1) * t - s)
 }
 
-export function easingOutBack(t: number): number {
+export function easeOutBack(t: number): number {
     const s = BACK
     return t === 0 ? 0 : --t * t * ((s + 1) * t + s) + 1
 }
 
-export function easingInOutBack(t: number): number {
+export function easeInOutBack(t: number): number {
     const s = BACK * 1.525
     t *= 2
     if (t === 0) {

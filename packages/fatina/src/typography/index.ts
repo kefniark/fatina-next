@@ -1,4 +1,4 @@
-import { easingLinear } from '@src/easing'
+import { easeLinear } from '@src/easing'
 import { FieldWrapper, TweenPropsSettings } from '@src/types'
 import { snap } from '@src/utils'
 import { animate } from '../core'
@@ -56,7 +56,7 @@ export function animateTypo<T extends HTMLElement>(obj: T, opts?: Partial<typeof
             for (const txt of texts) {
                 const dur = instant ? 1 : (txt.length / speed) * 1000
                 if (settings.autoClear) this.clear()
-                anim.to({ [settings.property]: FieldTyping(txt) }, dur, { easing: easingLinear })
+                anim.to({ [settings.property]: FieldTyping(txt) }, dur, { easing: easeLinear })
                 if (settings.delayAfterText > 0) this.delay(settings.delayAfterText)
             }
             return t

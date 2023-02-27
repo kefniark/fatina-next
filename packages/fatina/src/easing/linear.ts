@@ -1,4 +1,4 @@
 // Linear
-export function easingLinear(t: number): number {
+export function easeLinear(t: number): number {
     return t
 }

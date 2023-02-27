@@ -149,7 +149,7 @@ onMounted(async () => {
 ```vue
 <script setup>
 import { onMounted, ref } from 'vue'
-import { useFatinaAuto, animateCSS, easingInOutSine, easingOutElastic, easingOutQuad } from 'fatina'
+import { useFatinaAuto, animateCSS, easeInOutSine, easeOutElastic, easeOutQuad } from 'fatina'
 
 // initialize update loop
 useFatinaAuto()
@@ -170,9 +170,9 @@ onMounted(() => {
 
     // create a list of 30 random moves for each img
     for (let i = 0; i < 30; i++) {
-        animate1.to(randomPosition(), 1000, { easing: easingOutQuad })
-        animate2.to(randomPosition(), 1000, { easing: easingOutElastic })
-        animate3.to(randomPosition(), 1000, { easing: easingInOutSine })
+        animate1.to(randomPosition(), 1000, { easing: easeOutQuad })
+        animate2.to(randomPosition(), 1000, { easing: easeOutElastic })
+        animate3.to(randomPosition(), 1000, { easing: easeInOutSine })
     }
 
     // final position
