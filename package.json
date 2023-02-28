@@ -21,6 +21,9 @@
             "docs"
         ]
     },
+    "peerDependencies": {
+        "pixi.js": "^7.1.3"
+    },
     "devDependencies": {
         "@typescript-eslint/eslint-plugin": "^5.52.0",
         "@typescript-eslint/parser": "^5.52.0",

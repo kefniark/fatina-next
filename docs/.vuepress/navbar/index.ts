@@ -9,6 +9,21 @@ export default navbar([
     prefix: "/features/",
     children: [
       {
+        text: "Multiple Targets",
+        icon: "creative",
+        link: "array/",
+      },
+      {
+        text: "Conflict Solving",
+        icon: "creative",
+        link: "conflict/",
+      },
+      {
+        text: "Timeline",
+        icon: "creative",
+        link: "timeline/",
+      },
+      {
         text: "Update Loop",
         icon: "creative",
         link: "update/",
@@ -18,16 +33,6 @@ export default navbar([
         icon: "creative",
         link: "easing/",
       },
-      {
-        text: "Conflict Solving",
-        icon: "creative",
-        link: "conflict/",
-      },
-      {
-        text: "Multiple Targets",
-        icon: "creative",
-        link: "array/",
-      }
     ]
 },
   {

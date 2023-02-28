@@ -1,3 +1,5 @@
+import { Timeline } from './types'
+
 export function isString(obj: any): obj is string {
     return typeof obj === 'string' || obj instanceof String
 }
@@ -41,4 +43,32 @@ export function modulo(num: number, mod: number) {
 export function snap(num: number, steps: number) {
     if (steps <= 0) return num
     return Math.round(num * steps) / steps
+}
+
+export function mergeTimeline<T>(time1: Timeline<T>, time2: Timeline<T>) {
+    const timeline: Timeline<T> = {}
+    for (const time in time1) {
+        timeline[time] = { ...time1[time] }
+    }
+    for (const time in time2) {
+        timeline[time] = { ...timeline[time], ...time2[time] }
+    }
+    return timeline
+}
+
+export function resizeTimeline(timeline: Timeline<unknown>, duration: number) {
+    return scaleTimeline(normalizeTimeline(timeline), duration)
+}
+
+export function normalizeTimeline<T>(timeline: Timeline<T>): Timeline<T> {
+    const max = Math.max(...Object.keys(timeline).map((x) => parseFloat(x)))
+    return scaleTimeline(timeline, 1 / max)
+}
+
+export function scaleTimeline<T>(timeline: Timeline<T>, scale: number) {
+    return Object.fromEntries(
+        Object.entries(timeline).map(([time, props]) => {
+            return [parseFloat(time) * scale, props]
+        })
+    )
 }

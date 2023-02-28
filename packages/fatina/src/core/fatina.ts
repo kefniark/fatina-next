@@ -1,4 +1,4 @@
-import { wait } from '@src/utils'
+import { wait } from '../utils'
 import { createTicker } from '../ticker'
 import { FatinaAuto, FatinaType } from '../types'
 

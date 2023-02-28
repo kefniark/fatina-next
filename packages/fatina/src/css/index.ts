@@ -1,4 +1,4 @@
-import { selectHtmlElements } from '@src/utils'
+import { selectHtmlElements } from '../utils'
 import { AnimationSettings } from '../types'
 import { animate } from '../core'
 import { FieldColorHSL, FieldColorRGB } from './color'

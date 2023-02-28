@@ -1,0 +1,61 @@
+.anim .word {
+    /* animation: */
+}
+
+.anim .letter {
+    font-weight: 900;
+    font-size: 64px;
+    display: inline-block;
+    text-transform: uppercase;
+    transition: all 0.25s;
+    animation: appear 0.5s, rainbow 5s infinite;
+    animation-delay: calc(.1s * var(--letter-index));
+    animation-fill-mode: backwards;
+}
+
+@keyframes appear {
+    0% {
+        opacity: 0;
+        transform: translateY(100px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0px);
+    }
+}
+
+@keyframes rainbow {
+    0% {
+        color: #000000
+    }
+    10% {
+        color: #ff0000
+    }
+    20% {
+        color: #00ff00
+    }
+    30% {
+        color: #ffe100
+    }
+    40% {
+        color: #0000ff
+    }
+    50% {
+        color: #823994
+    }
+    60% {
+        color: #ff0000
+    }
+    70% {
+        color: #00ff00
+    }
+    80% {
+        color: #ffe100
+    }
+    90% {
+        color: #0000ff
+    }
+    0% {
+        color: #000000
+    }
+}

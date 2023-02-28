@@ -46,11 +46,14 @@ export function createTicker(): Ticker {
             lastDT = delta
             elapsed += delta
 
+            // console.log('> Tick Remove')
             if (ticks_remove.size > 0) {
                 ticks_remove.forEach((x) => ticks.delete(x))
                 ticks_remove.clear()
             }
+            // console.log('< Tick Removed')
 
+            // console.log('> Tick Add')
             if (ticks_add.size > 0) {
                 ticks_add.forEach((x) => {
                     x(delta)
@@ -58,14 +61,19 @@ export function createTicker(): Ticker {
                 })
                 ticks_add.clear()
             }
+            // console.log('< Tick Added')
 
+            // console.log('> Update', delta)
             ticks.forEach((x) => x(delta))
             tickers.forEach((x) => x.update(delta))
+            // console.log('< Updated', delta)
 
+            // console.log('> Post Update', delta)
             if (ticks_added.size > 0) {
                 ticks_added.forEach((x) => ticks.add(x))
                 ticks_added.clear()
             }
+            // console.log('< Post Updated', delta)
         },
         addListener(handler: (dt: number) => void) {
             if (ticks.has(handler) || ticks_add.has(handler)) return

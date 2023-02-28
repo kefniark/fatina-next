@@ -1,17 +1,19 @@
-import { roundTo, snap } from '@src/utils'
+import { roundTo, snap } from '../utils'
 import { easeLinear } from '../easing'
 import {
     animateDefaultSettings,
+    Animate,
     AnimateSettings,
     animationDefaultSettings,
     AnimationSettings,
     FieldWrapper,
-    FlattenObjectKeys,
-    PropsValue,
+    AnimateProps,
     Ticker,
     Tween,
     TweenProps,
-    TweenStatus
+    TweenStatus,
+    NonFunctionProperties,
+    Timeline
 } from '../types'
 import { useFatina } from './fatina'
 
@@ -38,26 +40,16 @@ function checkConflictTween(tween: TweenProps) {
     props[tween.property] = tween
 }
 
-export function animate<T extends Record<string, unknown>>(obj: T | T[], opt?: Partial<AnimateSettings>) {
+export function animate<K, T extends NonFunctionProperties<K>>(obj: K | K[], opt?: Partial<AnimateSettings>): Animate<T> {
     const options = { ...animateDefaultSettings, ...opt }
 
-    type AnimateProps = Partial<Record<FlattenObjectKeys<T>, PropsValue>> | ((index: number, obj: T) => Partial<Record<FlattenObjectKeys<T>, PropsValue>>)
-
+    const ticker = options.ticker ?? useFatina().defaultTicker
+    const events = new Set<CallableFunction>()
     const queue: Tween[] = []
     let current: Tween | undefined
 
-    const ticker = options.ticker ?? useFatina().defaultTicker
-
-    const events = new Set<CallableFunction>()
-
-    function start() {
-        ticker.addListener(update)
-    }
-
-    function stop() {
-        ticker.disposeListener(update)
-    }
-
+    const start = () => ticker.addListener(update)
+    const stop = () => ticker.disposeListener(update)
     const updateTween = (currentTween: Tween, deltaTime: number) => {
         // initialize
         if (currentTween.status === TweenStatus.Idle) {
@@ -163,19 +155,19 @@ export function animate<T extends Record<string, unknown>>(obj: T | T[], opt?: P
         }
     }
 
-    const animate = {
+    const anim = {
         isFinished() {
             return queue.length === 0 && !current
         },
         on(handler: CallableFunction) {
             queue.push({ props: [], duration: 0, elapsed: 0, handler, settings: null, status: 0 })
             start()
-            return animate
+            return anim
         },
         delay(duration: number) {
             queue.push({ props: [], duration, elapsed: 0, settings: null, status: 0 })
             start()
-            return animate
+            return anim
         },
         async(t?: Ticker): Promise<void> {
             return new Promise((resolve) => {
@@ -198,10 +190,45 @@ export function animate<T extends Record<string, unknown>>(obj: T | T[], opt?: P
             current = undefined
             queue.length = 0
         },
-        set(props: AnimateProps, options?: Partial<AnimationSettings>) {
+        set(props: AnimateProps<T>, options?: Partial<AnimationSettings>) {
             return this.to(props, 0, options)
         },
-        to(props: AnimateProps, duration = 500, options?: Partial<AnimationSettings>) {
+        clone() {
+            return animate(obj, opt) as Animate<T>
+        },
+        remainsDuration() {
+            const total = queue.reduce((a, b) => a + b.duration, 0)
+            const rem = current ? current.duration - current.elapsed : 0
+            return total + rem
+        },
+        timeline(line: Timeline<T>) {
+            const measure = this.remainsDuration()
+            const max = Math.max(...Object.keys(line).map((x) => parseFloat(x)))
+
+            const properties = new Map<string, [number, number][]>()
+            for (const [time, props] of Object.entries(line)) {
+                for (const [prop, value] of Object.entries(props)) {
+                    if (!properties.has(prop)) properties.set(prop, [])
+                    const arr = properties.get(prop)!
+                    arr.push([parseFloat(time), value])
+                }
+            }
+
+            for (const entry of properties.entries()) {
+                const prop = entry[0]
+                const steps = entry[1]
+                const anim = this.clone().delay(measure)
+
+                let last = 0
+                for (const [time, value] of steps) {
+                    anim.to({ [prop]: value } as any, time - last)
+                    last = time
+                }
+            }
+
+            return this.delay(max)
+        },
+        to(props: AnimateProps<T>, duration = 500, options?: Partial<AnimationSettings>) {
             const settings: AnimationSettings = options ? Object.assign({}, animationDefaultSettings, options) : animationDefaultSettings
             const tweens: TweenProps[] = []
             const arr = Array.isArray(obj) ? obj : [obj]
@@ -211,7 +238,7 @@ export function animate<T extends Record<string, unknown>>(obj: T | T[], opt?: P
 
             let i = 0
             for (const entry of arr) {
-                const res = typeof props === 'function' ? props(i, entry) : props
+                const res = typeof props === 'function' ? props(i, entry as unknown as T) : props
                 i++
                 for (const key in res) {
                     const path = key.split('.')
@@ -244,8 +271,8 @@ export function animate<T extends Record<string, unknown>>(obj: T | T[], opt?: P
             if (settings?.elapsed) updateTween(tween, settings.elapsed)
             start()
 
-            return animate
+            return anim
         }
     }
-    return animate
+    return anim
 }

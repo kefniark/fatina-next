@@ -1,4 +1,4 @@
-import { angle, camelToSnake, modulo, roundTo } from '@src/utils'
+import { angle, camelToSnake, modulo, roundTo } from '../utils'
 
 type Color = [number, number, number, number]
 

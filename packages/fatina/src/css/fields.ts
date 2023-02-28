@@ -1,5 +1,5 @@
-import { FieldWrapper, TweenPropsSettings } from '@src/types'
-import { camelToSnake, roundTo, snap } from '@src/utils'
+import { FieldWrapper, TweenPropsSettings } from '../types'
+import { camelToSnake, roundTo, snap } from '../utils'
 
 function fieldNumber() {
     return {

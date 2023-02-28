@@ -10,8 +10,8 @@ export default {
             name: 'fatina',
             formats: ['cjs', 'es'],
             fileName: (format) => {
-                if (format === 'cjs') return `fatina.cjs`
-                return `fatina.js`
+                if (format === 'cjs') return `index.cjs`
+                return `index.js`
             }
         }
     },

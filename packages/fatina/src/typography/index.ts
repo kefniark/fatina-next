@@ -1,6 +1,6 @@
-import { easeLinear } from '@src/easing'
-import { FieldWrapper, TweenPropsSettings } from '@src/types'
-import { snap } from '@src/utils'
+import { easeLinear } from '../easing'
+import { FieldWrapper, NonFunctionProperties, TweenPropsSettings } from '../types'
+import { snap } from '../utils'
 import { animate } from '../core'
 
 function FieldTyping(value: string) {
@@ -34,9 +34,9 @@ export interface AnimationTypoTweenSettings {
     instant: boolean
 }
 
-export function animateTypo<T extends HTMLElement>(obj: T, opts?: Partial<typeof animationTypoDefaultSettings>) {
+export function animateTypo<K extends HTMLElement, T extends NonFunctionProperties<K>>(obj: K, opts?: Partial<typeof animationTypoDefaultSettings>) {
     const settings = Object.assign({}, animationTypoDefaultSettings, opts) as typeof animationTypoDefaultSettings
-    const anim = animate(obj as unknown as Record<string, string>)
+    const anim = animate<K, T>(obj)
 
     const t = {
         on(handler: CallableFunction) {
@@ -56,7 +56,7 @@ export function animateTypo<T extends HTMLElement>(obj: T, opts?: Partial<typeof
             for (const txt of texts) {
                 const dur = instant ? 1 : (txt.length / speed) * 1000
                 if (settings.autoClear) this.clear()
-                anim.to({ [settings.property]: FieldTyping(txt) }, dur, { easing: easeLinear })
+                anim.to({ [settings.property]: FieldTyping(txt) } as any, dur, { easing: easeLinear })
                 if (settings.delayAfterText > 0) this.delay(settings.delayAfterText)
             }
             return t
